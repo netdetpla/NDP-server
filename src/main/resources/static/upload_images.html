@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>镜像上传</title>
+    <link href="css/materialize.css" rel="stylesheet">
+    <link href="css/unify_style.css" rel="stylesheet">
+    <link href="css/upload_images.css" rel="stylesheet">
+</head>
+<body>
+<div>
+    <!-- 导航 -->
+    <nav class="nav">
+        <div class="nav-wrapper blue darken-1">
+            <a href="javascript:void(0);" class="brand-logo left">调度平台</a>
+            <ul class="right hide-on-med-and-down">
+                <li class="active"><a href="javascript:void(0);">镜像上传</a></li>
+                <li><a href="task.html">任务管理</a></li>
+                <li><a href="task_machine.html">任务机器管理</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="upload">
+        <!-- TODO 上传url, 文件名 -->
+        <form action="upload" enctype="multipart/form-data" method="post">
+            <div class="file-field input-field">
+                <div class="btn blue darken-1">
+                    <span>选择文件</span>
+                    <input type="file" name="filename" />
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="上传一个或多个镜像">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field">
+                    <input id="tarHash" type="text" class="validate" name="tarHash">
+                    <label for="tarHash">tar包hash值</label>
+                </div>
+            </div>
+            <div>
+                <button class="btn waves-effect waves-light blue darken-1" type="submit" name="action">上传</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- 蒙版 -->
+<div id="mask"></div>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/materialize.js"></script>
+</body>
+</html>
