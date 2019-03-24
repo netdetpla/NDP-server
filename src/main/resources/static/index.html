@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>镜像管理</title>
+    <link href="css/materialize.css" rel="stylesheet">
+    <link href="css/unify_style.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+
+</head>
+<body>
+<div>
+    <!-- 导航 -->
+    <nav class="nav-extended">
+        <div class="nav-wrapper blue darken-1">
+            <a href="javascript:void(0);" class="brand-logo left">调度平台</a>
+        </div>
+        <div class="nav-content blue darken-1">
+            <ul class="tabs tabs-transparent">
+                <li class="tab"><a class="active" href="#imageList">镜像管理</a></li>
+                <li class="tab"><a href="#taskList">任务管理</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!--镜像管理页-->
+    <div class="row" id="imageList">
+        <!--侧边栏-->
+        <div class="col s2" style="padding: 0">
+            <div class="collection blue darken-1 sidebar" style="border: 0;">
+                <a href="#imageTable" class="collection-item blue darken-1 active">镜像列表</a>
+                <a href="#imageUpload" class="collection-item">镜像上传</a>
+            </div>
+        </div>
+        <!--镜像表格-->
+        <div class="col s10" id="imageTable">
+                <table class="highlight centered">
+                    <thead>
+                    <tr>
+                        <th>镜像名称</th>
+                        <th>当前使用版本</th>
+                        <th>最近上传版本</th>
+                    </tr>
+                    </thead>
+                    <tbody id="imageTableBody">
+                    </tbody>
+                </table>
+        </div>
+        <!--镜像上传表单-->
+        <div class="col s10 hide" id="imageUpload">
+            <div class="row">
+                <div class="col s4"></div>
+                <div class="col s4">
+                    <form method="POST" enctype="multipart/form-data" id="imageUploadFrom">
+                        <div class="file-field input-field">
+                            <div class="btn blue darken-1">
+                                <span>选择上传镜像</span>
+                                <input type="file">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" id="filePath">
+                                <label for="filePath" class="hide">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <input id="imageName" type="text" class="validate">
+                            <label for="imageName">镜像名称</label>
+                        </div>
+                        <div class="input-field">
+                            <input id="imageTag" type="text" class="validate">
+                            <label for="imageTag">标签</label>
+                        </div>
+                        <div class="input-field">
+                            <input id="testParam" type="text" class="validate">
+                            <label for="testParam">测试参数</label>
+                        </div>
+                        <button class="btn waves-effect waves-light blue darken-1 right"
+                                type="submit"
+                                id="uploadSubmit"
+                                name="action">上传</button>
+                    </form>
+                </div>
+                <div class="col s4"></div>
+            </div>
+        </div>
+    </div>
+    <!--任务管理页-->
+    <div id="taskList" class="row">
+        <!--侧边栏-->
+        <div class="col s2" style="padding: 0">
+            <div class="collection blue darken-1 sidebar" style="border: 0;">
+                <a href="#taskTable" class="collection-item blue darken-1 active">任务列表</a>
+                <a href="#taskCreate" class="collection-item">新建任务</a>
+            </div>
+        </div>
+        <!--任务表格-->
+        <div class="col s10" id="taskTable">
+            <table class="highlight centered">
+                <thead>
+                <tr>
+                    <th>镜像名称</th>
+                    <th>当前使用版本</th>
+                    <th>最近上传版本</th>
+                </tr>
+                </thead>
+                <tbody id="taskTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+<!-- 蒙版 -->
+<div id="mask"></div>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
