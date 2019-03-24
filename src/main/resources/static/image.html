@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>镜像管理</title>
+    <link href="css/materialize.css" rel="stylesheet">
+    <link href="css/unify_style.css" rel="stylesheet">
+</head>
+<body>
+<div>
+    <!-- 导航 -->
+    <nav class="nav-extended">
+        <div class="nav-wrapper blue darken-1">
+            <a href="javascript:void(0);" class="brand-logo left">调度平台</a>
+        </div>
+        <div class="nav-content blue darken-1">
+            <ul class="tabs tabs-transparent">
+                <li class="tab"><a class="active" href="#imageList">镜像管理</a></li>
+                <li class="tab"><a href="#imageUpload">任务管理</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row" id="imageList">
+        <div class="col s2" style="padding: 0">
+            <div class="collection blue darken-1" style="border: 0;">
+                <a href="#!" class="collection-item">镜像列表</a>
+                <a href="#!" class="collection-item blue darken-1 active">镜像上传</a>
+            </div>
+        </div>
+        <div class="col s10">
+                <table class="highlight centered">
+                    <thead>
+                    <tr>
+                        <th>IP地址</th>
+                        <th>网络状况(Bps)</th>
+                        <th>执行任务数量</th>
+                        <th>评分</th>
+                        <th>连接状况</th>
+                    </tr>
+                    </thead>
+                    <tbody id="taskMachineTableBody">
+                    </tbody>
+                </table>
+        </div>
+    </div>
+    <div id="imageUpload" class="col s12">上传镜像</div>
+</div>
+<!-- 蒙版 -->
+<div id="mask"></div>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

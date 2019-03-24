@@ -61,3 +61,10 @@ img {
     z-index: -1;
     transition: all 0.3s ease 0.1s;
 }
+
+a.collection-item {
+    color: #1e88e5 !important;
+}
+a.collection-item.active {
+    color: #ffffff !important;
+}
