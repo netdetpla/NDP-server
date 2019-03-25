@@ -71,11 +71,28 @@ public class ImageController {
     }
 
     @GetMapping("/image/{image_name}")
-    public ResponseEntity<?> getImageInfo(@PathVariable String imageName) {
+    public ResponseEntity<?> getTags() {
+
+        //TODO 查询任务
+        List<Image> data = new ArrayList<>();
+        data.add(new Image("1.0.0", "2019-03-01 09:00:00"));
+        data.add(new Image("1.0.1", "2019-03-02 09:00:00"));
+        return new ResponseEntity<>(new ResponseEnvelope<>(
+                HttpStatus.OK.value(),
+                "OK",
+                data
+        ), HttpStatus.OK);
+    }
+
+    @GetMapping("/image/{image_name}/{tag}")
+    public ResponseEntity<?> getImageInfo(
+            @PathVariable(value = "image_name") String imageName,
+            @PathVariable String tag
+    ) {
         //TODO 查询任务
         Image data = new Image(
                 imageName,
-                "1.0.0",
+                tag,
                 true,
                 "2019-03-01 09:00:00",
                 "800MB",

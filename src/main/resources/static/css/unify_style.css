@@ -64,7 +64,38 @@ img {
 
 a.collection-item {
     color: #1e88e5 !important;
+    border: 0 !important;
 }
+
 a.collection-item.active {
     color: #ffffff !important;
+}
+
+.side-text {
+    color: #ffffff;
+    margin-left: 10%;
+}
+
+.full-height {
+    height: 100%;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+.side-type-text {
+    color: #e0e0e0;
+    font-size: small;
+    margin-left: 5%;
+}
+
+table {
+    height: inherit;
+    overflow: scroll;
+}
+
+.form-fix {
+    margin-top: 10%;
 }

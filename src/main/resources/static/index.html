@@ -9,111 +9,195 @@
 
 </head>
 <body>
-<div>
-    <!-- 导航 -->
-    <nav class="nav-extended">
-        <div class="nav-wrapper blue darken-1">
-            <a href="javascript:void(0);" class="brand-logo left">调度平台</a>
+<!-- 导航 -->
+<div class="row full-height">
+    <!--侧边栏-->
+    <div class="col s2 blue darken-1 full-height z-depth-3" style="padding: 0">
+        <h4 class="side-text">NDP</h4>
+        <div class="side-type-text">镜像管理</div>
+        <div class="collection blue darken-1 sidebar" style="border: 0;">
+            <a href="#imageTable" class="collection-item" id="imageTableLink">镜像列表</a>
+            <a href="#imageUpload" class="collection-item blue darken-1 active">镜像上传</a>
         </div>
-        <div class="nav-content blue darken-1">
-            <ul class="tabs tabs-transparent">
-                <li class="tab"><a class="active" href="#imageList">镜像管理</a></li>
-                <li class="tab"><a href="#taskList">任务管理</a></li>
-            </ul>
+        <div class="side-type-text">任务管理</div>
+        <div class="collection blue darken-1 sidebar" style="border: 0;">
+            <a href="#taskTable" class="collection-item blue darken-1 active">任务列表</a>
+            <a href="#taskCreate" class="collection-item blue darken-1 active">新建任务</a>
         </div>
-    </nav>
-    <!--镜像管理页-->
-    <div class="row" id="imageList">
-        <!--侧边栏-->
-        <div class="col s2" style="padding: 0">
-            <div class="collection blue darken-1 sidebar" style="border: 0;">
-                <a href="#imageTable" class="collection-item blue darken-1 active">镜像列表</a>
-                <a href="#imageUpload" class="collection-item">镜像上传</a>
+    </div>
+    <!--镜像表格-->
+    <div class="col s10 full-height " id="imageTable">
+        <div class="row full-height">
+            <div class="col s3 full-height blue lighten-5">
+                <div>
+                    <h5>镜像列表</h5>
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>镜像名称</th>
+                        </tr>
+                        </thead>
+                        <tbody id="imageTableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <!--镜像表格-->
-        <div class="col s10" id="imageTable">
-                <table class="highlight centered">
+            <div class="col s1"></div>
+            <div class="col s9">
+                <h5 id="tagTitle"><span></span>对应标签列表</h5>
+                <table class="highlight">
                     <thead>
                     <tr>
-                        <th>镜像名称</th>
-                        <th>当前使用版本</th>
-                        <th>最近上传版本</th>
+                        <th>标签</th>
+                        <th>上传时间</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody id="imageTableBody">
+                    <tbody id="tagTableBody">
                     </tbody>
                 </table>
-        </div>
-        <!--镜像上传表单-->
-        <div class="col s10 hide" id="imageUpload">
-            <div class="row">
-                <div class="col s4"></div>
-                <div class="col s4">
-                    <form method="POST" enctype="multipart/form-data" id="imageUploadFrom">
-                        <div class="file-field input-field">
-                            <div class="btn blue darken-1">
-                                <span>选择上传镜像</span>
-                                <input type="file">
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate" type="text" id="filePath">
-                                <label for="filePath" class="hide">Last Name</label>
-                            </div>
-                        </div>
-                        <div class="input-field">
-                            <input id="imageName" type="text" class="validate">
-                            <label for="imageName">镜像名称</label>
-                        </div>
-                        <div class="input-field">
-                            <input id="imageTag" type="text" class="validate">
-                            <label for="imageTag">标签</label>
-                        </div>
-                        <div class="input-field">
-                            <input id="testParam" type="text" class="validate">
-                            <label for="testParam">测试参数</label>
-                        </div>
-                        <button class="btn waves-effect waves-light blue darken-1 right"
-                                type="submit"
-                                id="uploadSubmit"
-                                name="action">上传</button>
-                    </form>
-                </div>
-                <div class="col s4"></div>
             </div>
         </div>
     </div>
-    <!--任务管理页-->
-    <div id="taskList" class="row">
-        <!--侧边栏-->
-        <div class="col s2" style="padding: 0">
-            <div class="collection blue darken-1 sidebar" style="border: 0;">
-                <a href="#taskTable" class="collection-item blue darken-1 active">任务列表</a>
-                <a href="#taskCreate" class="collection-item">新建任务</a>
+    <!--镜像上传表单-->
+    <div class="col s10 hide" id="imageUpload">
+        <h5>镜像上传</h5>
+        <div class="row form-fix">
+            <div class="col s4"></div>
+            <div class="col s4">
+                <form method="POST" enctype="multipart/form-data" id="imageUploadFrom">
+                    <div class="file-field input-field">
+                        <div class="btn blue darken-1">
+                            <span>选择上传镜像</span>
+                            <input type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" id="filePath">
+                            <label for="filePath" class="hide">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input id="imageName" type="text" class="validate">
+                        <label for="imageName">镜像名称</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="imageTag" type="text" class="validate">
+                        <label for="imageTag">标签</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="testParam" type="text" class="validate">
+                        <label for="testParam">测试参数</label>
+                    </div>
+                    <button class="btn waves-effect waves-light blue darken-1 right"
+                            type="submit"
+                            id="uploadSubmit"
+                            name="action">上传
+                    </button>
+                </form>
             </div>
-        </div>
-        <!--任务表格-->
-        <div class="col s10" id="taskTable">
-            <table class="highlight centered">
-                <thead>
-                <tr>
-                    <th>镜像名称</th>
-                    <th>当前使用版本</th>
-                    <th>最近上传版本</th>
-                </tr>
-                </thead>
-                <tbody id="taskTableBody">
-                </tbody>
-            </table>
+            <div class="col s4"></div>
         </div>
     </div>
-
-
+    <!--任务表格-->
+    <div class="col s10 hide" id="taskTable">
+        <h5>任务列表</h5>
+        <a class="waves-effect waves-light btn blue darken-1">选择镜像</a>
+        <table class="highlight centered">
+            <thead>
+            <tr>
+                <th>任务ID</th>
+                <th>任务名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+            </tr>
+            </thead>
+            <tbody id="taskTableBody">
+            <tr>
+                <td>10000</td>
+                <td>scanA</td>
+                <td>2019.03.14 09:00:00</td>
+                <td>2019.03.15 09:00:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--任务创建-->
+    <div class="col s10 hide" id="taskCreate">
+        <h5>任务创建</h5>
+        <div class="row form-fix">
+            <div class="col s4"></div>
+            <div class="col s4">
+                <form method="POST" enctype="multipart/form-data" id="taskCreateFrom">
+                    <a class="waves-effect waves-light btn blue darken-1">选择镜像</a>
+                    <a class="waves-effect waves-light btn blue darken-1">选择标签</a>
+                    <div class="input-field">
+                        <input id="taskParam" type="text" class="validate">
+                        <label for="taskParam">任务参数</label>
+                    </div>
+                    <button class="btn waves-effect waves-light blue darken-1 right"
+                            type="submit"
+                            id="createSubmit"
+                            name="action">下发
+                    </button>
+                </form>
+            </div>
+            <div class="col s4"></div>
+        </div>
+    </div>
 </div>
+
 <!-- 蒙版 -->
 <div id="mask"></div>
+<!--镜像详情-->
+<div class="card horizontal" id="imageDetailCard">
+    <div class="card-content">
+        <span class="card-title" id="imageDetailTitle"></span>
+        <div class="table-content row">
+            <table class="highlight col s8">
+                <caption>基本信息</caption>
+                <tr>
+                    <th>镜像名称</th>
+                    <td id="IDCImageName"></td>
+                </tr>
+                <tr>
+                    <th>标签</th>
+                    <td id="IDCTag"></td>
+                </tr>
+                <tr>
+                    <th>当前使用</th>
+                    <td id="IDCCurrentUse"></td>
+                </tr>
+                <tr>
+                    <th>上传时间</th>
+                    <td id="IDCUploadTime"></td>
+                </tr>
+                <tr>
+                    <th>镜像大小</th>
+                    <td id="IDCSize"></td>
+                </tr>
+            </table>
+            <table class="highlight centered col s4">
+                <caption>测试信息</caption>
+                <tr>
+                    <th>CPU占用</th>
+                    <td id="IDCCPU"></td>
+                </tr>
+                <tr>
+                    <th>内存占用</th>
+                    <td id="IDCMemory"></td>
+                </tr>
+                <tr>
+                    <th>带宽占用</th>
+                    <td id="IDCBandwidth"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="card-action center">
+            <a id="okImageDetail" class="waves-effect waves-light btn blue darken-1">确定</a>
+        </div>
+    </div>
+</div>
 <script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/vue.js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/index.js"></script>
 </body>

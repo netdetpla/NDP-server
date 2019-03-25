@@ -1,3 +1,23 @@
-#imageUpload {
-    margin-top: 10%;
+.image-type {
+    padding: 10px;
+}
+
+#imageTable {
+    padding-left: 0;
+}
+
+#imageDetailCard {
+    display: none;
+    position: absolute;
+    width: 600px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+#imageTaskCard {
+    width: 1000px;
+    max-height: 550px;
+    overflow: auto;
 }

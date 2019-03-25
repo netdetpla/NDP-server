@@ -4,10 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TaskStaticController {
-
-    @GetMapping("/task")
+public class StaticController {
+    @GetMapping("/")
     public String getTaskPage() {
-        return "/task.html";
+        return "/index.html";
     }
 }
