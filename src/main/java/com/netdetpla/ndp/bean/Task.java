@@ -8,6 +8,8 @@ public class Task {
 
     @JsonProperty(value = "image-name")
     private String imageName;
+    @JsonProperty(value = "task-name")
+    private String taskName;
     private String tag;
     private int id;
     @JsonProperty(value = "start-time")
@@ -32,8 +34,8 @@ public class Task {
         return param;
     }
 
-    public Task(String imageName, String tag, int id, String startTime, String endTime) {
-        this.imageName = imageName;
+    public Task(String taskName, String tag, int id, String startTime, String endTime) {
+        this.taskName = taskName;
         this.id = id;
         this.tag = tag;
         this.startTime = startTime;

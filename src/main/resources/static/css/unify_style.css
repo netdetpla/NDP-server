@@ -99,3 +99,7 @@ table {
 .form-fix {
     margin-top: 10%;
 }
+
+.btn {
+    text-transform: none;
+}
