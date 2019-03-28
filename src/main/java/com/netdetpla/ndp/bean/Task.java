@@ -34,10 +34,9 @@ public class Task {
         return param;
     }
 
-    public Task(String taskName, String tag, int id, String startTime, String endTime) {
+    public Task(int id, String taskName, String startTime, String endTime) {
         this.taskName = taskName;
         this.id = id;
-        this.tag = tag;
         this.startTime = startTime;
         this.endTime = endTime;
     }

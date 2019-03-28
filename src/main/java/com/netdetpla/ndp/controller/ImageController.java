@@ -8,40 +8,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 public class ImageController {
-    // 保存镜像文件
-    private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
-        for (MultipartFile file : files) {
-            if (file.isEmpty())
-                continue;
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get("./" + file.getOriginalFilename());
-            Files.write(path, bytes);
-        }
-    }
 
-    private float saveUploadedFile(MultipartFile file) throws IOException {
-        if (file.isEmpty())
-            return 0;
-        byte[] bytes = file.getBytes();
-        Path path = Paths.get("./" + file.getOriginalFilename());
-        Files.write(path, bytes);
-        // TODO 计算文件大小
-        file.getSize();
-        return 0;
+    // 保存镜像文件
+    private static void writeToLocal(String destination, InputStream input)
+            throws IOException {
+        int index;
+        byte[] bytes = new byte[1024];
+        FileOutputStream downloadFile = new FileOutputStream(destination);
+        while ((index = input.read(bytes)) != -1) {
+            downloadFile.write(bytes, 0, index);
+            downloadFile.flush();
+        }
+        downloadFile.close();
+        input.close();
     }
 
     // 上传镜像
@@ -52,8 +43,11 @@ public class ImageController {
             @RequestParam("tag") String tag,
             @RequestParam("test-param") String testParam
     ) {
+        String size = "";
         try {
 //            saveUploadedFiles(Collections.singletonList(uploadFile));
+            writeToLocal("./" + uploadFile.getOriginalFilename(), uploadFile.getInputStream());
+            size = String.format("%.2fMB", (double) uploadFile.getSize() / 1024 / 1024);
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseEnvelope<>(
                     HttpStatus.BAD_REQUEST.value(),
@@ -68,9 +62,10 @@ public class ImageController {
         SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(time.format(nowTime));
         DatabaseHandler.execute(
-                "insert into image(image_name, tag, upload_time) values (?, ?, ?)",
+                "insert into image(image_name, tag, `size`, upload_time) values (?, ?, ?, ?)",
                 imageName,
                 tag,
+                size,
                 time.format(nowTime)
         );
         return new ResponseEntity<>(new ResponseEnvelope<>(
@@ -84,7 +79,7 @@ public class ImageController {
         List<String> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery("select distinct image_name from image");
         while (resultSet.next()) {
-            data.add(resultSet.getString(0));
+            data.add(resultSet.getString(1));
         }
         return new ResponseEntity<>(new ResponseEnvelope<>(
                 HttpStatus.OK.value(),
@@ -102,8 +97,8 @@ public class ImageController {
         );
         while (resultSet.next()) {
             data.add(new Image(
-                    resultSet.getString(0),
-                    resultSet.getString(1)
+                    resultSet.getString(1),
+                    resultSet.getString(2)
             ));
         }
         return new ResponseEntity<>(new ResponseEnvelope<>(
@@ -120,7 +115,7 @@ public class ImageController {
     ) throws SQLException {
         //TODO 查询任务
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select upload_time from image where image_name = ? and tag = ?",
+                "select upload_time, size from image where image_name = ? and tag = ?",
                 imageName,
                 tag
         );
@@ -131,8 +126,8 @@ public class ImageController {
                 imageName,
                 tag,
                 true,
-                resultSet.getString(0),
-                "800MB",
+                resultSet.getString(1),
+                resultSet.getString(2),
                 0.5f,
                 1024,
                 20

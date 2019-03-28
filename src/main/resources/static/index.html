@@ -141,7 +141,12 @@
                 <a class="waves-effect waves-light btn blue darken-1" id="selectImage">选择镜像</a>
                 <a class="waves-effect waves-light btn blue darken-1 disabled" id="selectTag">选择标签</a>
                 <div class="input-field">
-                    <input id="taskParam" type="text" class="validate">
+                    <input id="taskName" type="text" class="validate">
+                    <label for="taskName">任务名称</label>
+                </div>
+                <div class="input-field">
+<!--                    <input id="taskParam" type="text" class="validate">-->
+                    <textarea id="taskParam" class="materialize-textarea"></textarea>
                     <label for="taskParam">任务参数</label>
                 </div>
                 <button class="btn waves-effect waves-light blue darken-1 right" id="submitTask">下发

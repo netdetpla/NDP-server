@@ -19,19 +19,27 @@ public class TaskController {
     public ResponseEntity<?> addTask(
             @RequestParam("image-name") String imageName,
             @RequestParam("tag") String tag,
+            @RequestParam("task-name") String taskName,
             @RequestParam("param") String param
     ) throws SQLException {
         System.out.println("image-name: " + imageName);
         System.out.println("tag: " + tag);
+        System.out.println("task-name: " + taskName);
         System.out.println("param: " + param);
         ResultSet resultSet = DatabaseHandler.executeQuery(
                 "select id from image where image_name = ? and tag = ?",
                 imageName,
                 tag
         );
-        int image_id = resultSet.getInt(0);
+        resultSet.next();
+        int image_id = resultSet.getInt(1);
         // TODO 处理任务添加失败
-        DatabaseHandler.execute("insert into task(image_id, param) values (?, ?)", Integer.toString(image_id), param);
+        DatabaseHandler.execute(
+                "insert into task(task_name, image_id, param) values (?, ?, ?)",
+                taskName,
+                Integer.toString(image_id),
+                param
+        );
         return new ResponseEntity<>(new ResponseEnvelope<>(
                 HttpStatus.OK.value(),
                 "OK"
@@ -39,23 +47,22 @@ public class TaskController {
     }
 
     @GetMapping("/task/{image_name}")
-    public ResponseEntity<?> getTask(@PathVariable("image_name") String image) {
+    public ResponseEntity<?> getTask(@PathVariable("image_name") String imageName) throws SQLException {
         // TODO 查询任务
         List<Task> data = new ArrayList<>();
-        data.add(new Task(
-                "scanA",
-                "1.0.0",
-                10000,
-                "2019-03-19 09:00:00",
-                "2019-03-19 10:00:00"
-        ));
-        data.add(new Task(
-                "scanB",
-                "1.0.0",
-                10001,
-                "2019-03-19 09:00:00",
-                "2019-03-19 10:00:00"
-        ));
+        ResultSet resultSet = DatabaseHandler.executeQuery(
+                "select id, task_name, start_time, end_time from task where image_id in " +
+                        "(select id from image where image_name = ?)",
+                imageName
+        );
+        while (resultSet.next()) {
+            data.add(new Task(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4)
+            ));
+        }
         return new ResponseEntity<>(new ResponseEnvelope<>(
                 HttpStatus.OK.value(),
                 "OK",

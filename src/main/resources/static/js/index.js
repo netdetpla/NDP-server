@@ -114,9 +114,9 @@ function getTasks(imageName) {
             $taskBody.append("<tr></tr>");
             let $row = $taskBody.find("tr:last");
             $row.append("<td>" + data[i].id + "</td>");
-            $row.append("<td>" + data[i]['task-name'] + "</td>");
-            $row.append("<td>" + data[i]['start-time'] + "</td>");
-            $row.append("<td>" + data[i]['end-time'] + "</td>");
+            $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
         }
     })
 }
@@ -173,11 +173,13 @@ function resetCreateTask() {
     $("#selectImage").html("选择镜像");
     $("#selectTag").addClass("disabled").html("选择标签");
     $("#taskParam").val("");
+    $("#taskName").val("");
 }
 function submitTask() {
     let data = new FormData();
     data.append("image-name", $("#selectImage").html());
     data.append("tag", $("#selectTag").html());
+    data.append("task-name", $("#taskName").val());
     data.append("param", $("#taskParam").val());
     $.ajax({
         type: "POST",
@@ -233,7 +235,7 @@ $("#selectImage").on("click", function () {
 });
 // 任务创建 - 选择标签
 $("#selectTag").on("click", function () {
-    getTags4Select();
+    getTags4Select($("#selectImage").html());
     openCard($("#selectTagCard"));
 });
 // 选择镜像 - 取消
