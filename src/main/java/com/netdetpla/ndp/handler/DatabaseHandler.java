@@ -1,27 +1,19 @@
 package com.netdetpla.ndp.handler;
 
-import java.io.InputStream;
+import org.springframework.stereotype.Component;
 import java.sql.*;
-import java.util.Properties;
 
+@Component
 public class DatabaseHandler {
     private static Connection connection = null;
-    private static String url = "";
-    private static String driverName = "";
-    private static String username = "";
-    private static String password = "";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/ndp?serverTimezone=GMT%2B8";
+	private static String drivername = "com.mysql.cj.jdbc.Driver";
+	private static String username = "root";
+	private static String password = "password" ;
 
     static {
         try {
-            Properties properties = new Properties();
-            InputStream is = DatabaseHandler.class.getClassLoader().getResourceAsStream("settings.properties");
-            assert is != null;
-            properties.load(is);
-            driverName = properties.getProperty("dbDriver");
-            username = properties.getProperty("dbUserName");
-            password = properties.getProperty("dbPassword");
-            url = properties.getProperty("dbUrl");
-            Class.forName(driverName);
+            Class.forName(drivername);
             connection = DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +26,7 @@ public class DatabaseHandler {
             return connection;
         }
         try {
-            Class.forName(driverName);
+            Class.forName(drivername);
             connection = DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             e.printStackTrace();

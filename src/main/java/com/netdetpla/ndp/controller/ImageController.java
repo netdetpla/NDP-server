@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 @RestController
 public class ImageController {
@@ -46,7 +47,7 @@ public class ImageController {
         String size = "";
         try {
 //            saveUploadedFiles(Collections.singletonList(uploadFile));
-            writeToLocal("./" + uploadFile.getOriginalFilename(), uploadFile.getInputStream());
+            writeToLocal("/storage/" + uploadFile.getOriginalFilename(), uploadFile.getInputStream());
             size = String.format("%.2fMB", (double) uploadFile.getSize() / 1024 / 1024);
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseEnvelope<>(
