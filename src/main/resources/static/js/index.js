@@ -147,6 +147,15 @@ function getImages4Select() {
             $row.append("<td>" + data[i] + "</td>");
             $row.on("click", function () {
                 $("#selectImage").html($(this).find("td:first").html());
+                //修改了参数显示的UI
+                imageName = $("#selectImage").html();
+                if(imageName == "scanweb"){
+                    $("#paramshow").css('display','none');
+                    $("#ipshow").css('display','block');
+                }else{
+                    $("#paramshow").css('display','block');
+                    $("#ipshow").css('display','none');
+                }
                 $("#selectTag").removeClass("disabled").html("选择标签");
                 closeCard($("#selectImageCard"));
             });
@@ -180,7 +189,9 @@ function submitTask() {
     data.append("image-name", $("#selectImage").html());
     data.append("tag", $("#selectTag").html());
     data.append("task-name", $("#taskName").val());
+    data.append("priority", $("#taskPriority").val());
     data.append("param", $("#taskParam").val());
+    data.append("ip", $("#taskip").val());
     $.ajax({
         type: "POST",
         url: "/task",

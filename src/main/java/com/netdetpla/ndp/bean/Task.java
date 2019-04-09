@@ -17,6 +17,7 @@ public class Task {
     @JsonProperty(value = "end-time")
     private String endTime;
     private String param;
+    private String ip;
 
     public String getImage() {
         return imageName;
@@ -34,13 +35,17 @@ public class Task {
         return param;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
     public Task(int id, String taskName, String startTime, String endTime) {
         this.taskName = taskName;
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
     }
-    public Task(String param) {
-        this.param = param;
-    }
+    public Task(String ip) {
+        this.ip = ip;
+    } // 4.9 把param替换为ip了
 }
