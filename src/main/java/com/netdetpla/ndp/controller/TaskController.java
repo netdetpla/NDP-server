@@ -64,6 +64,7 @@ public class TaskController {
         if(Integer.parseInt(mask)<24){
             ips[0] = ip + "/" + 24;
             int i = 1;
+
             while(ipToDouble(getEndIpStr(ip,String.valueOf(24)))<endIpDou){
                 if(ipsplitInt[2]<255){
                     ipsplitInt[2]++;
@@ -93,7 +94,8 @@ public class TaskController {
         for(int i=0;ips[i]!=null;i++){
             System.out.println(ips[i]);
             String mixParam = param+ips[i];
-            String paramString = id + ";" + taskName + ";0;1;" + mixParam + ";" + id;
+            int idnew = id + i;
+            String paramString = idnew + ";" + taskName + ";0;1;" + mixParam + ";" + idnew;
             String paramBase64 = null;
             try {
                 paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
