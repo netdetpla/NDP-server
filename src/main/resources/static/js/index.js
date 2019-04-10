@@ -200,6 +200,7 @@ function submitTask() {
     data.append("task-name", $("#taskName").val());
     data.append("priority", $("#taskPriority").val());
     data.append("param", $("#taskParam").val());
+    data.append("ip", $("#taskip").val());
     data.append("url", $("#url").val());
     data.append("level", $("#level").val());
     data.append("keyword", $("#keyword").val());

@@ -125,19 +125,42 @@ public class TaskController {
             System.out.println("url：" + url);
             System.out.println("level：" + level);
             System.out.println("keyword：" + keyword);
+            String[] urls = url.split(",");
+            String[] urlsjson = new String[urls.length];
             if(keyword.equals("")){
-//                paramsexcel = {"para": {"urls": [{"url":"www.youku1.com","is_search":0,
-//                        "search_level":0,"priority":5},{"url":"www.youku2.com","is_search":0,"search_level":0,"priority":5}] ,
-//                    "filename":"filename", "taskName": "taskName","type": "excel"}}
-                String[] urls = url.split(",");
-                for(int i = 0;i<urls.length;i++){
-//                    String[] urlsjson = new String;
-                }
-                String urlsentense = "[{\"urls\":[";
+                for(int i = 0;i<urls.length;i++)
+                    urlsjson[i] = "{\"url\":\"" + urls[i] + "\",\"is_search\":0,\"search_level\":" + level + ",\"priority\":" + priority +"}";
+                String urlMerge = urlsjson[0];
+                for(int i = 1;i<urls.length;i++)
+                    urlMerge = urlMerge + "," +urlsjson[i];
+                param = "{\"urls\":[" + urlMerge + "],\"taskName\":\"" + taskName + "\"}";
+                System.out.println("无keyword的parm："+param);
+                // TODO 处理任务添加失败
+                DatabaseHandler.execute(
+                        "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                        tidString,
+                        taskName,
+                        Integer.toString(image_id),
+                        param,
+                        priority
+                );
             }else{
 //                params = {"para": {"url": "www.youku.com", "deep_level":2,"date":2,"keyword": "nba","type": "search"}}
-
+                for(int i=0;i<urls.length;i++){
+                    urlsjson[i] = "{\"url\":\"" + urls[i] + "\",\"deep_level\":" + level + ",\"date\":2,\"keyword\":\"" + keyword + "\",\"type\":\"search\"}";
+                    System.out.println("有keyword的parm："+urlsjson[i]);
+                    // TODO 处理任务添加失败
+                    DatabaseHandler.execute(
+                            "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                            tidString,
+                            taskName,
+                            Integer.toString(image_id),
+                            urlsjson[i],
+                            priority
+                    );
+                }
             }
+
         }
 
 
