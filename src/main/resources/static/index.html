@@ -150,10 +150,14 @@
                         <input type="range" id="taskPriority" min="0" max="10"/>
                     </p>
                 </div>
-                <div class="input-field">
+                <div class="input-field" id="paramshow">
                     <!--                    <input id="taskParam" type="text" class="validate">-->
                     <textarea id="taskParam" class="materialize-textarea"></textarea>
                     <label for="taskParam">任务参数</label>
+                </div>
+                <div class="input-field" id="ipshow" style="display: none">
+                    <input id="taskip" type="text" name="taskip" class="validate">
+                    <label for="taskip">ip段</label>
                 </div>
                 <button class="btn waves-effect waves-light blue darken-1 right" id="submitTask">下发
                 </button>
