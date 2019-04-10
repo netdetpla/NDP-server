@@ -152,9 +152,18 @@ function getImages4Select() {
                 if(imageName == "scanweb"){
                     $("#paramshow").css('display','none');
                     $("#ipshow").css('display','block');
-                }else{
+                    for (let j = 1;j < 4; j++)
+                        $("#ecdsystem"+j).css('display','none')
+                }else if(imageName == "ecdsystem"){
+                    for (let j = 1;j < 4; j++)
+                        $("#ecdsystem"+j).css('display','block')
+                    $("#paramshow").css('display','none');
+                    $("#ipshow").css('display','none');
+                }else {
                     $("#paramshow").css('display','block');
                     $("#ipshow").css('display','none');
+                    for (let j = 1;j < 4; j++)
+                        $("#ecdsystem"+j).css('display','none')
                 }
                 $("#selectTag").removeClass("disabled").html("选择标签");
                 closeCard($("#selectImageCard"));
@@ -191,7 +200,9 @@ function submitTask() {
     data.append("task-name", $("#taskName").val());
     data.append("priority", $("#taskPriority").val());
     data.append("param", $("#taskParam").val());
-    data.append("ip", $("#taskip").val());
+    data.append("url", $("#url").val());
+    data.append("level", $("#level").val());
+    data.append("keyword", $("#keyword").val());
     $.ajax({
         type: "POST",
         url: "/task",
