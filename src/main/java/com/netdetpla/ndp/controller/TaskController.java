@@ -52,44 +52,47 @@ public class TaskController {
         int tid = resultSet2.getInt(2)+1;
         String tidString = String.valueOf(tid);
         //ip切分，把任务切分为小任务
-        String[] ipAndmask = ip.split("/");
-        ip = ipAndmask[0];
-        String mask = ipAndmask[1];
-        String[] ipsplit = ip.split("\\.");
-        int[] ipsplitInt = new int[4];
-        for (int i = 0; i < ipsplit.length; i++)
-            ipsplitInt[i] = Integer.parseInt(ipsplit[i]);
+        String[] ipInputSplit = ip.split(",");
         String[] ips =new String[256*256];
-        Double endIpDou=ipToDouble(getEndIpStr(ip, mask));
-        if(Integer.parseInt(mask)<24){
-            ips[0] = ip + "/" + 24;
-            int i = 1;
-
-            while(ipToDouble(getEndIpStr(ip,String.valueOf(24)))<endIpDou){
-                if(ipsplitInt[2]<255){
-                    ipsplitInt[2]++;
-                    ipsplitInt[3] = 0;
-                    ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                    ips[i] = ip + "/24";
-                    i++;
-                }else if(ipsplitInt[3]<255){
-                    ipsplitInt[1]++;
-                    ipsplitInt[2] = 0;
-                    ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                    ips[i] = ip + "/24";
-                    i++;
+        int j = 0;
+        for(int i=0;i<ipInputSplit.length;i++){
+            if(ipInputSplit[i].contains("/")){
+                String[] ipAndmask = ipInputSplit[i].split("/");
+                ip = ipAndmask[0];
+                String mask = ipAndmask[1];
+                String[] ipsplit = ip.split("\\.");
+                int[] ipsplitInt = new int[4];
+                for (int k = 0; k < ipsplit.length; k++)
+                    ipsplitInt[k] = Integer.parseInt(ipsplit[k]);
+                Double endIpDou=ipToDouble(getEndIpStr(ip, mask));
+                if(Integer.parseInt(mask)<24){
+                    ips[j++] = ip + "/" + 24;
+                    while(ipToDouble(getEndIpStr(ip,String.valueOf(24)))<endIpDou){
+                        if(ipsplitInt[2]<255){
+                            ipsplitInt[2]++;
+                            ipsplitInt[3] = 0;
+                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                            ips[j++] = ip + "/24";
+                        }else if(ipsplitInt[3]<255){
+                            ipsplitInt[1]++;
+                            ipsplitInt[2] = 0;
+                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                            ips[j++] = ip + "/24";
+                        }else{
+                            ipsplitInt[0]++;
+                            ipsplitInt[1] = 0;
+                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                            ips[j++] = ip + "/24";
+                        }
+                    }
                 }else{
-                    ipsplitInt[0]++;
-                    ipsplitInt[1] = 0;
-                    ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                    ips[i] = ip + "/24";
-                    i++;
+                    ips[j++]=ip+"/"+mask;
                 }
+            }else{
+                ips[j++] = ipInputSplit[i];
             }
-        }else{
-            ips[0]=ip+"/"+mask;
         }
-        System.out.println(ips.length);
+
         // TODO 处理任务添加失败
         for(int i=0;ips[i]!=null;i++){
             System.out.println(ips[i]);
