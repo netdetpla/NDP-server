@@ -61,16 +61,12 @@ public class TaskController {
                 ip = ipAndmask[0];
                 String mask = ipAndmask[1];
                 String[] ipsplit = ip.split("\\.");
-                System.out.println("节点一");
                 int[] ipsplitInt = new int[4];
                 for (int k = 0; k < ipsplit.length; k++)
                     ipsplitInt[k] = Integer.parseInt(ipsplit[k]);
                 Double endIpDou=ipToDouble(getEndIpStr(ip, mask));
-                System.out.println("节点二");
                 if(Integer.parseInt(mask)<24){
                     ips[j++] = ip + "/" + 24;
-                    System.out.println("节点三");
-
                     while(ipToDouble(getEndIpStr(ip,String.valueOf(24)))<endIpDou){
                         if(ipsplitInt[2]<255){
                             ipsplitInt[2]++;
@@ -97,7 +93,6 @@ public class TaskController {
             }
         }
 
-        System.out.println(ips.length);
         // TODO 处理任务添加失败
         for(int i=0;ips[i]!=null;i++){
             System.out.println(ips[i]);
