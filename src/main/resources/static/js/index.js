@@ -41,6 +41,12 @@ function getImageDetail(imageName, tag) {
         $("#imageDetailTitle").html([imageName, tag].join(":"));
     });
 }
+//2019.4.15添加子任务弹窗功能
+function  getSubTask(id){
+
+}
+
+
 function getTags(imageName) {
     $("#tagTitle").find("span:first").html(imageName);
     let $tagBody = $("#tagTableBody");
@@ -117,6 +123,10 @@ function getTasks(imageName) {
             $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
+            $row.on("click", function () {
+                getSubTask($(this).find("td:first").html());
+                openCard($("#imageDetailCard"));
+            });
         }
     })
 }
@@ -192,6 +202,14 @@ function resetCreateTask() {
     $("#selectTag").addClass("disabled").html("选择标签");
     $("#taskParam").val("");
     $("#taskName").val("");
+    $("#taskip").val("");
+    $("#url").val("");
+    $("#level").val("");
+    $("#keyword").val("");
+    $("#paramshow").css('display','block');
+    $("#ipshow").css('display','none');
+    for (let j = 1;j < 4; j++)
+        $("#ecdsystem"+j).css('display','none')
 }
 function submitTask() {
     let data = new FormData();
@@ -214,10 +232,12 @@ function submitTask() {
         timeout: 10,
         success: function (data) {
             //TODO
+            alert("新建任务成功！");
             resetCreateTask();
         },
         error: function (e) {
             //TODO
+            alert("新建任务失败！");
             resetCreateTask();
         }
     });
