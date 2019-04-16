@@ -234,18 +234,24 @@
 <!--子任务详情-->
 <div class="card horizontal" id="subTaskCard">
     <div class="card-content">
-        <span class="card-title">选择镜像</span>
+        <span class="card-title" id="subTaskTitle"></span>
         <table class="highlight">
             <thead>
             <tr>
+                <th>子任务id</th>
                 <th>镜像名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>参数</th>
+                <th>子任务状态</th>
+                <th>优先级</th>
             </tr>
             </thead>
-            <tbody id="selectImageTableBody">
+            <tbody id="subTaskTableBody">
             </tbody>
         </table>
         <div class="card-action center">
-            <a id="cancelSelectImage" class="waves-effect waves-light btn blue darken-1">取消</a>
+            <a id="cancelSubTask" class="waves-effect waves-light btn blue darken-1">取消</a>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 package com.netdetpla.ndp.controller;
 
 import com.netdetpla.ndp.bean.ResponseEnvelope;
+import com.netdetpla.ndp.bean.SubTask;
 import com.netdetpla.ndp.bean.Task;
 import com.netdetpla.ndp.handler.DatabaseHandler;
 import org.springframework.http.HttpStatus;
@@ -170,13 +171,33 @@ public class TaskController {
         ), HttpStatus.OK);
     }
 
+    @GetMapping("/task/{task_name}")
+    public ResponseEntity<?> getSubTask(@PathVariable(value = "task_name") String task_name) throws SQLException {
+        List<SubTask> data = new ArrayList<>();
+        ResultSet resultSet = DatabaseHandler.executeQuery(
+                "select id, image from image where image_name = ?",
+                imageName
+        );
+        while (resultSet.next()) {
+            data.add(new Image(
+                    resultSet.getString(1),
+                    resultSet.getString(2)
+            ));
+        }
+        return new ResponseEntity<>(new ResponseEnvelope<>(
+                HttpStatus.OK.value(),
+                "OK",
+                data
+        ), HttpStatus.OK);
+    }
+
     @GetMapping("/task/{image_name}")
     public ResponseEntity<?> getTask(@PathVariable("image_name") String imageName) throws SQLException {
         // TODO 查询任务
         List<Task> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select id, task_name, start_time, end_time from task where image_id in " +
-                        "(select id from image where image_name = ?)",
+                "select tid, task_name, start_time, end_time from task where image_id in " +
+                        "(select id from image where image_name = ?) group by tid",
                 imageName
         );
         while (resultSet.next()) {

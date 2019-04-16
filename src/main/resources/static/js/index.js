@@ -42,8 +42,21 @@ function getImageDetail(imageName, tag) {
     });
 }
 //2019.4.15添加子任务弹窗功能
-function  getSubTask(id){
-
+function  getSubTask(tid,task_name){
+    let $subTaskBody = $("#subTaskTableBody");
+    $subTaskBody.empty("tr");
+    $.get("task/" + task_name, {}, function (json) {
+        let data = json.data;
+        for (let i = 0; i < data.length; i++) {
+            $subTaskBody.append("<tr></tr>");
+            let $row = $subTaskBody.find("tr:last");
+            $row.append("<td>" + data[i].tag + "</td>");
+            $row.on("click", function () {
+                $("#selectTag").html($(this).find("td:first").html());
+                closeCard($("#selectTagCard"));
+            });
+        }
+    })
 }
 
 
@@ -119,13 +132,13 @@ function getTasks(imageName) {
         for (let i = 0; i < data.length; i++) {
             $taskBody.append("<tr></tr>");
             let $row = $taskBody.find("tr:last");
-            $row.append("<td>" + data[i].id + "</td>");
+            $row.append("<td>" + data[i].tid + "</td>");
             $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
             $row.on("click", function () {
-                getSubTask($(this).find("td:first").html());
-                openCard($("#imageDetailCard"));
+                getSubTask($(this).find("td:first").html(),$('#this').parent().children().eq(1).html());
+                openCard($("#subTaskCard"));
             });
         }
     })
