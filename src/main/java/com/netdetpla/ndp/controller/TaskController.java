@@ -171,17 +171,21 @@ public class TaskController {
         ), HttpStatus.OK);
     }
 
-    @GetMapping("/task/{task_name}")
+    @GetMapping("/task/{image_name}/{task_name}")
     public ResponseEntity<?> getSubTask(@PathVariable(value = "task_name") String task_name) throws SQLException {
         List<SubTask> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select id, image from image where image_name = ?",
-                imageName
+                "select id,start_time,end_time,param,task_status,priority from task where task_name = ?",
+                task_name
         );
         while (resultSet.next()) {
-            data.add(new Image(
-                    resultSet.getString(1),
-                    resultSet.getString(2)
+            data.add(new SubTask(
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5),
+                    resultSet.getInt(6)
             ));
         }
         return new ResponseEntity<>(new ResponseEnvelope<>(
@@ -196,8 +200,11 @@ public class TaskController {
         // TODO 查询任务
         List<Task> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select tid, task_name, start_time, end_time from task where image_id in " +
-                        "(select id from image where image_name = ?) group by tid",
+                "select s.tid, s.task_name, s.start_time, s.end_time from " +
+                        "(select *, row_number() over (partition by tid order by id) as group_idx from task) s " +
+                        "where s.image_id in " +
+                        "(select id from image where image_name = ?) " +
+                        "and s.group_idx = 1",
                 imageName
         );
         while (resultSet.next()) {

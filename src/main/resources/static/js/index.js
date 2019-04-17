@@ -42,19 +42,21 @@ function getImageDetail(imageName, tag) {
     });
 }
 //2019.4.15添加子任务弹窗功能
-function  getSubTask(tid,task_name){
+function  getSubTask(imageName,tid,task_name){
+    $("#subTaskTitle").find("span:first").html("镜像"+imageName+"的任务"+task_name+"的子任务列表");
     let $subTaskBody = $("#subTaskTableBody");
     $subTaskBody.empty("tr");
-    $.get("task/" + task_name, {}, function (json) {
+    $.get("task/" + imageName+"/"+task_name, {}, function (json) {
         let data = json.data;
         for (let i = 0; i < data.length; i++) {
             $subTaskBody.append("<tr></tr>");
             let $row = $subTaskBody.find("tr:last");
-            $row.append("<td>" + data[i].tag + "</td>");
-            $row.on("click", function () {
-                $("#selectTag").html($(this).find("td:first").html());
-                closeCard($("#selectTagCard"));
-            });
+            $row.append("<td>" + (data[i].id || "")+ "</td>");
+            $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['param'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['task-status'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['priority'] || "") + "</td>");
         }
     })
 }
@@ -132,12 +134,12 @@ function getTasks(imageName) {
         for (let i = 0; i < data.length; i++) {
             $taskBody.append("<tr></tr>");
             let $row = $taskBody.find("tr:last");
-            $row.append("<td>" + data[i].tid + "</td>");
+            $row.append("<td>" + (data[i]['tid'] || "")  + "</td>");
             $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
             $row.on("click", function () {
-                getSubTask($(this).find("td:first").html(),$('#this').parent().children().eq(1).html());
+                getSubTask($(this).find(imageName,"td:first").html(),$('#this').parent().children().eq(1).html());
                 openCard($("#subTaskCard"));
             });
         }
@@ -301,6 +303,10 @@ $("#cancelSelectImage").on("click", function () {
 // 选择标签 - 取消
 $("#cancelSelectTag").on("click", function () {
     closeCard($("#selectTagCard"));
+});
+//子任务展示 - 取消
+$("#cancelSubTask").on("click", function () {
+    closeCard($("#subTaskCard"));
 });
 $("#submitTask").on("click", function () {
     submitTask();

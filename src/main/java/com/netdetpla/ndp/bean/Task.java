@@ -12,6 +12,8 @@ public class Task {
     private String taskName;
     private String tag;
     private int id;
+    @JsonProperty(value = "tid")
+    private int tid;
     @JsonProperty(value = "start-time")
     private String startTime;
     @JsonProperty(value = "end-time")
@@ -39,9 +41,9 @@ public class Task {
         return ip;
     }
 
-    public Task(int id, String taskName, String startTime, String endTime) {
+    public Task(int tid, String taskName, String startTime, String endTime) {
         this.taskName = taskName;
-        this.id = id;
+        this.tid = tid;
         this.startTime = startTime;
         this.endTime = endTime;
     }

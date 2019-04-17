@@ -6,7 +6,7 @@
     padding-left: 0;
 }
 
-#imageDetailCard, #selectImageCard, #selectTagCard {
+#imageDetailCard, #selectImageCard, #selectTagCard, #subTaskCard {
     display: none;
     position: absolute;
     width: 600px;
