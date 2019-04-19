@@ -134,7 +134,7 @@ public class TaskController {
                 String urlMerge = urlsjson[0];
                 for(int i = 1;i<urls.length;i++)
                     urlMerge = urlMerge + "," +urlsjson[i];
-                param = "{\"urls\":[" + urlMerge + "],\"taskName\":\"" + taskName + "\"}";
+                param = "{\"taskID\":\""+id+"\",\"urls\":[" + urlMerge + "],\"taskName\":\"" + taskName + "\"}";
                 System.out.println("无keyword的parm："+param);
                 // TODO 处理任务添加失败
                 DatabaseHandler.execute(
@@ -148,7 +148,7 @@ public class TaskController {
             }else{
 //                params = {"para": {"url": "www.youku.com", "deep_level":2,"date":2,"keyword": "nba","type": "search"}}
                 for(int i=0;i<urls.length;i++){
-                    urlsjson[i] = "{\"url\":\"" + urls[i] + "\",\"deep_level\":" + level + ",\"date\":2,\"keyword\":\"" + keyword + "\",\"type\":\"search\"}";
+                    urlsjson[i] = "{\"taskID\":\""+id+"\",\"url\":\"" + urls[i] + "\",\"deep_level\":" + level + ",\"date\":2,\"keyword\":\"" + keyword + "\",\"type\":\"search\"}";
                     System.out.println("有keyword的parm："+urlsjson[i]);
                     // TODO 处理任务添加失败
                     DatabaseHandler.execute(
@@ -159,6 +159,7 @@ public class TaskController {
                             urlsjson[i],
                             priority
                     );
+                    id++;
                 }
             }
 

@@ -43,7 +43,7 @@ function getImageDetail(imageName, tag) {
 }
 //2019.4.15添加子任务弹窗功能
 function  getSubTask(imageName,tid,task_name){
-    $("#subTaskTitle").find("span:first").html("镜像"+imageName+"的任务"+task_name+"的子任务列表");
+    $("#subTaskTitle").html(imageName+":"+task_name+"  子任务列表");
     let $subTaskBody = $("#subTaskTableBody");
     $subTaskBody.empty("tr");
     $.get("task/" + imageName+"/"+task_name, {}, function (json) {
@@ -117,10 +117,12 @@ function submitImage() {
         timeout: 600000,
         success: function (data) {
             //TODO
+            alert("上传镜像成功！");
             $("#uploadSubmit").prop("disabled", false);
         },
         error: function (e) {
             //TODO
+            alert("上传镜像失败！");
             $("#uploadSubmit").prop("disabled", false);
         }
     });
@@ -139,7 +141,7 @@ function getTasks(imageName) {
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
             $row.on("click", function () {
-                getSubTask($(this).find(imageName,"td:first").html(),$('#this').parent().children().eq(1).html());
+                getSubTask(imageName, $(this).find("td:first").html(), $(this).children('td').eq(1).html());
                 openCard($("#subTaskCard"));
             });
         }
@@ -244,7 +246,6 @@ function submitTask() {
         processData: false,
         contentType: false,
         cache: false,
-        timeout: 10,
         success: function (data) {
             //TODO
             alert("新建任务成功！");
