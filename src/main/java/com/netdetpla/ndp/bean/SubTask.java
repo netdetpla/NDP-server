@@ -4,50 +4,45 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Task {
+public class SubTask {
 
     @JsonProperty(value = "image-name")
     private String imageName;
     @JsonProperty(value = "task-name")
     private String taskName;
-    private String tag;
+    @JsonProperty(value = "id")
     private int id;
-    @JsonProperty(value = "tid")
     private int tid;
     @JsonProperty(value = "start-time")
     private String startTime;
     @JsonProperty(value = "end-time")
     private String endTime;
+    @JsonProperty(value = "param")
     private String param;
-    private String ip;
+    @JsonProperty(value = "task-status")
+    private String taskStatus;
+    @JsonProperty(value = "priority")
+    private int priority;
 
-    public String getImage() {
+
+    public int getTid() {
+        return tid;
+    }
+
+    public String getImageName() {
         return imageName;
     }
 
-    public String getTag() {
-        return tag;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getParam() {
-        return param;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public Task(int tid, String taskName, String startTime, String endTime) {
-        this.taskName = taskName;
-        this.tid = tid;
+    public SubTask(int id, String startTime, String endTime, String param, String taskStatus, int priority) {
+        this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.param = param;
+        this.taskStatus = taskStatus;
+        this.priority = priority;
     }
-    public Task(String ip) {
-        this.ip = ip;
-    } // 4.9 把param替换为ip了
 }

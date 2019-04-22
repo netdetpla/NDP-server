@@ -6,10 +6,20 @@
     padding-left: 0;
 }
 
-#imageDetailCard, #selectImageCard, #selectTagCard {
+#imageDetailCard, #selectImageCard, #selectTagCard{
     display: none;
     position: absolute;
     width: 600px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+#subTaskCard{
+    display: none;
+    position: absolute;
+    width: 1000px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
