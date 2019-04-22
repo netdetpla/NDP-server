@@ -165,6 +165,10 @@ function getImages4Task() {
 }
 function getImages4Select() {
     let $imageBody = $("#selectImageTableBody");
+    let imageParam = {
+        "scanweb":["ip"],
+        "ecdsystem":["url","level","keyword"]
+    };
     $imageBody.empty("tr");
     $.get("image", {}, function (json) {
         let data = json.data;
@@ -176,28 +180,25 @@ function getImages4Select() {
                 $("#selectImage").html($(this).find("td:first").html());
                 //修改了参数显示的UI
                 imageName = $("#selectImage").html();
-                if(imageName == "scanweb"){
-                    $("#paramshow").css('display','none');
-                    $("#ipshow").css('display','block');
-                    for (let j = 1;j < 4; j++)
-                        $("#ecdsystem"+j).css('display','none')
-                }else if(imageName == "ecdsystem"){
-                    for (let j = 1;j < 4; j++)
-                        $("#ecdsystem"+j).css('display','block')
-                    $("#paramshow").css('display','none');
-                    $("#ipshow").css('display','none');
-                }else {
-                    $("#paramshow").css('display','block');
-                    $("#ipshow").css('display','none');
-                    for (let j = 1;j < 4; j++)
-                        $("#ecdsystem"+j).css('display','none')
-                }
+                paramChange(imageParam[imageName]);
                 $("#selectTag").removeClass("disabled").html("选择标签");
                 closeCard($("#selectImageCard"));
             });
         }
     });
 }
+//根据不同镜像，显示不同参数输入框
+function paramChange(params){
+    let $paramDiv = $('#paramDiv');
+    $paramDiv.empty();
+    for(let i=0;i<params.length;i++){
+        $paramDiv.append("<div className=\"input-field\">\n" +
+            "                 <input id=\""+params[i]+"\" type=\"text\" name=\""+params[i]+"\" className=\"validate\">\n" +
+            "                 <label for=\""+params[i]+"\">"+params[i]+"</label>\n" +
+            "             </div>\n")
+    }
+}
+
 function getTags4Select(imageName) {
     let $tagBody = $("#selectTagTableBody");
     $tagBody.empty("tr");
@@ -228,17 +229,19 @@ function resetCreateTask() {
     for (let j = 1;j < 4; j++)
         $("#ecdsystem"+j).css('display','none')
 }
-function submitTask() {
+function  submitTask() {
     let data = new FormData();
     data.append("image-name", $("#selectImage").html());
     data.append("tag", $("#selectTag").html());
     data.append("task-name", $("#taskName").val());
     data.append("priority", $("#taskPriority").val());
-    data.append("param", $("#taskParam").val());
-    data.append("ip", $("#taskip").val());
-    data.append("url", $("#url").val());
-    data.append("level", $("#level").val());
-    data.append("keyword", $("#keyword").val());
+    let params = [];
+    $("#paramDiv input").each(function () {
+        params.push(this.value);
+    })
+    for(let i=0;i<params.length;i++){
+        data.append("params[]", params[i]);
+    }
     $.ajax({
         type: "POST",
         url: "/task",

@@ -1,4 +1,4 @@
-package com.netdetpla.ndp;
+package com.netdetpla.ndp.utils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ public class IpUtil {
      * 主要功能都在main方法里，需要什么自己找
      */
 //    public static void main(String[] args) {
-//        String ip="10.2.18.16";//ip
-//        String mask="22";//位数，如果只知道子网掩码不知道位数的话在参考getMaskMap()方法
+//        String ip="1.0.0.127";//ip
+//        String mask="25";//位数，如果只知道子网掩码不知道位数的话在参考getMaskMap()方法
 //
 //        //获得起始IP和终止IP的方法（包含网络地址和广播地址）
 //        String startIp=getBeginIpStr(ip, mask);
@@ -29,19 +29,19 @@ public class IpUtil {
 ////        System.out.println("起始IP：" + startIp + "终止IP：" + endIp);
 //
 //        //判断一个IP是否属于某个网段
-//        boolean flag = isInRange("10.2.0.0", "10.3.0.0/17");
-//        System.out.println(flag);
-//
-//        //根据位数查询IP数量
-//        int ipCount = getIpCount("24");
-//        System.out.println(ipCount);
-//
-//        //判断是否是一个IP
-//        System.out.println(isIP("192.168.1.0"));
-//
-//        //把ip转换为数字(mysql中inet_aton()的实现)
-//        System.out.println(ipToDouble("192.168.1.1"));
-//        System.out.println(ipToDouble("192.168.1.2"));
+////        boolean flag = isInRange("10.2.0.0", "10.3.0.0/17");
+////        System.out.println(flag);
+////
+////        //根据位数查询IP数量
+////        int ipCount = getIpCount("24");
+////        System.out.println(ipCount);
+////
+////        //判断是否是一个IP
+////        System.out.println(isIP("192.168.1.0"));
+////
+////        //把ip转换为数字(mysql中inet_aton()的实现)
+////        System.out.println(ipToDouble("192.168.1.1"));
+////        System.out.println(ipToDouble("192.168.1.2"));
 //
 //        //打印IP段所有IP（IP过多会内存溢出）
 ////      List<String> list = parseIpMaskRange(ip, mask);
@@ -49,6 +49,142 @@ public class IpUtil {
 ////          System.out.println(s);
 ////      }
 //    }
+
+    /**
+     * ip拆分，根据不同拆分粒度拆分任务输入ip段
+     */
+    public  static String[] ipSplit(String[] ipInput,int num){
+        String[] ipInputSplit = ipInput;
+        String[] ips =new String[256*256];
+        int j = 0;
+        for(int i=0;i<ipInputSplit.length;i++){
+            if(ipInputSplit[i].contains("/")){
+                String[] ipAndmask = ipInputSplit[i].split("/");
+                String ip = ipAndmask[0];
+                String mask = ipAndmask[1];
+                String[] ipsplit = ip.split("\\.");
+                int[] ipsplitInt = new int[4];
+                for (int k = 0; k < ipsplit.length; k++)
+                    ipsplitInt[k] = Integer.parseInt(ipsplit[k]);
+                Double endIpDou=ipToDouble(getEndIpStr(ip, mask));
+
+                if(Integer.parseInt(mask)<num){
+                    ips[j++] = ip + "/" + num;
+                    String endIp = getEndIpStr(ip,String.valueOf(num));
+                    while(ipToDouble(endIp)<endIpDou){
+                        if(num>=24){
+                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"24"))){
+                                String[] endIpSplit = endIp.split("\\.");
+                                ipsplitInt[3] = Integer.parseInt(endIpSplit[3])+1;
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else if(ipsplitInt[2]<255){
+                                ipsplitInt[2]++;
+                                ipsplitInt[3] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" +num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else if(ipsplitInt[1]<255){
+                                ipsplitInt[1]++;
+                                ipsplitInt[2] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else{
+                                ipsplitInt[0]++;
+                                ipsplitInt[1] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }
+                        }else if (num>=16){
+                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"16"))){
+                                String[] endIpSplit = endIp.split("\\.");
+                                ipsplitInt[2] = Integer.parseInt(endIpSplit[2])+1;
+                                ipsplitInt[3] = 0;
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else if(ipsplitInt[1]<255){
+                                ipsplitInt[1]++;
+                                ipsplitInt[2] = 0;
+                                ipsplitInt[3] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else{
+                                ipsplitInt[0]++;
+                                ipsplitInt[1] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }
+                        }else if (num>=8){
+                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"8"))){
+                                String[] endIpSplit = endIp.split("\\.");
+                                ipsplitInt[1] = Integer.parseInt(endIpSplit[1])+1;
+                                ipsplitInt[2] = 0;
+                                ipsplitInt[3] = 0;
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }else{
+                                ipsplitInt[0]++;
+                                ipsplitInt[1] = 0;
+                                ipsplitInt[2] = 0;
+                                ipsplitInt[3] = 0;
+                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }
+                        }else if (num>0){
+                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"1"))){
+                                String[] endIpSplit = endIp.split("\\.");
+                                ipsplitInt[0] = Integer.parseInt(endIpSplit[0])+1;
+                                ipsplitInt[1] = 0;
+                                ipsplitInt[2] = 0;
+                                ipsplitInt[3] = 0;
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip,String.valueOf(num));
+                            }
+                        }
+                    }
+
+                }else{
+                    ips[j++]=ip+"/"+mask;
+                }
+//                if(Integer.parseInt(mask)<24){
+//                    ips[j++] = ip + "/" + 24;
+//                    while(ipToDouble(getEndIpStr(ip,String.valueOf(24)))<endIpDou){
+//                        if(ipsplitInt[2]<255){
+//                            ipsplitInt[2]++;
+//                            ipsplitInt[3] = 0;
+//                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+//                            ips[j++] = ip + "/24";
+//                        }else if(ipsplitInt[1]<255){
+//                            ipsplitInt[1]++;
+//                            ipsplitInt[2] = 0;
+//                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+//                            ips[j++] = ip + "/24";
+//                        }else{
+//                            ipsplitInt[0]++;
+//                            ipsplitInt[1] = 0;
+//                            ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+//                            ips[j++] = ip + "/24";
+//                        }
+//                    }
+//                }else{
+//                    ips[j++]=ip+"/"+mask;
+//                }
+            }else{
+                ips[j++] = ipInputSplit[i];
+            }
+        }
+        return  ips;
+    }
+
 
     /**
      * 功能：判断一个IP是不是在一个网段下的
@@ -275,8 +411,8 @@ public class IpUtil {
     /**
      * 计算子网大小
      *
-     * @param netmask
-     *            掩码位
+     * @param
+     *
      * @return
      */
     public static int getPoolMax(int maskBit)
