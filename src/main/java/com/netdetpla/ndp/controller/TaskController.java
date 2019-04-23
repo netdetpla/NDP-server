@@ -100,11 +100,12 @@ public class TaskController {
         // TODO 查询任务
         List<Task> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select s.tid, s.task_name, s.start_time, s.end_time from " +
-                        "(select *, row_number() over (partition by tid order by id) as group_idx from task) s " +
-                        "where s.image_id in " +
-                        "(select id from image where image_name = ?) " +
-                        "and s.group_idx = 1",
+//                "select s.tid, s.task_name, s.start_time, s.end_time from " +
+//                        "(select *, row_number() over (partition by tid order by id) as group_idx from task) s " +
+//                        "where s.image_id in " +
+//                        "(select id from image where image_name = ?) " +
+//                        "and s.group_idx = 1",
+                "select  tid, task_name, start_time, end_time from task where image_id in (select id from image where image_name = ?) GROUP BY tid",
                 imageName
         );
         while (resultSet.next()) {
