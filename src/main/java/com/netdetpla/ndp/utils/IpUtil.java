@@ -51,6 +51,47 @@ public class IpUtil {
 //    }
 
     /**
+     * 端口port拆分
+     */
+    public static String[] portSplit(String[] portInput){
+        int low,high,lowPlus;
+        int j = 0;
+        String[] portOuput = new String[100*100];
+        String singlePorts = "";
+        for(int i=0;i<portInput.length;i++){
+            if(portInput[i].contains("-")){
+                String[] portRange = portInput[i].split("-");
+                low = Integer.parseInt(portRange[0]);
+                high = Integer.parseInt(portRange[1]);
+                lowPlus = low + 99;
+                while(lowPlus<=high){
+                    portOuput[j++] = low + "-" + lowPlus;
+                    low = low + 100;
+                    lowPlus = low + 99;
+                }
+                if(low<high)
+                    portOuput[j++] = low + "-" + high;
+                else if(low==high){
+                    if(singlePorts.equals("")){
+                        singlePorts = low +"";
+                    }else{
+                        singlePorts = singlePorts + "," + low;
+                    }
+                }
+            }else{
+                if(singlePorts.equals("")){
+                    singlePorts = portInput[i];
+                }else{
+                    singlePorts = singlePorts + "," + portInput[i];
+                }
+            }
+        }
+        portOuput[j] = singlePorts;
+        return  portOuput;
+    }
+
+
+    /**
      * ip拆分，根据不同拆分粒度拆分任务输入ip段
      */
     public  static String[] ipSplit(String[] ipInput,int num){
