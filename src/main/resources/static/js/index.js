@@ -167,7 +167,8 @@ function getImages4Select() {
     let $imageBody = $("#selectImageTableBody");
     let imageParam = {
         "scanweb":["ip"],
-        "ecdsystem":["url","level","keyword"]
+        "ecdsystem":["url","level","keyword"],
+        "scanservice":["ip","port"]
     };
     $imageBody.empty("tr");
     $.get("image", {}, function (json) {
@@ -192,7 +193,7 @@ function paramChange(params){
     let $paramDiv = $('#paramDiv');
     $paramDiv.empty();
     for(let i=0;i<params.length;i++){
-        $paramDiv.append("<div className=\"input-field\">\n" +
+        $paramDiv.append("<div class=\"input-field\">\n" +
             "                 <input id=\""+params[i]+"\" type=\"text\" name=\""+params[i]+"\" className=\"validate\">\n" +
             "                 <label for=\""+params[i]+"\">"+params[i]+"</label>\n" +
             "             </div>\n")

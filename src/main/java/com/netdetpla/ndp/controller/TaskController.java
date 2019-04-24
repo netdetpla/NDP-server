@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import static com.netdetpla.ndp.utils.ImageUtil.ecdsystem;
-import static com.netdetpla.ndp.utils.ImageUtil.scanweb;
+import static com.netdetpla.ndp.utils.ImageUtil.*;
 import static com.netdetpla.ndp.utils.IpUtil.*;
 
 @RestController
@@ -59,6 +58,9 @@ public class TaskController {
                 break;
             case "ecdsystem":
                 ecdsystem(id,image_id,tidString,taskName,priority,params);
+                break;
+            case "scanservice":
+                scanservice(id,tidString,image_id,taskName,priority,params,24);
                 break;
             default:
                 break;
@@ -105,7 +107,7 @@ public class TaskController {
 //                        "where s.image_id in " +
 //                        "(select id from image where image_name = ?) " +
 //                        "and s.group_idx = 1",
-                "select  tid, task_name, start_time, end_time from task where image_id in (select id from image where image_name = ?) GROUP BY tid",
+                "select  tid, task_name, start_time, end_time from task where image_id in (select id from image where image_name = ?) GROUP BY tid ORDER BY tid desc",
                 imageName
         );
         while (resultSet.next()) {
