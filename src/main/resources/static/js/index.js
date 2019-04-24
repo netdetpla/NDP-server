@@ -194,10 +194,10 @@ function paramChange(params){
     $paramDiv.empty();
     for(let i=0;i<params.length;i++){
         $paramDiv.append("<div className=\"input-field\">\n" +
-            "                 <input id=\""+params[i]+"\" type=\"text\" name=\""+params[i]+"\" className=\"validate\">\n" +
-            "                 <label for=\""+params[i]+"\">"+params[i]+"</label>\n" +
+            "                 <input placeholder=\""+ params[i] +"\" id=\""+params[i]+"\" type=\"text\" name=\""+params[i]+"\" className=\"validate\">\n" +
             "             </div>\n")
     }
+    Materialize.updateTextFields();
 }
 
 function getTags4Select(imageName) {
