@@ -86,7 +86,8 @@ public class IpUtil {
                 }
             }
         }
-        portOuput[j] = singlePorts;
+        if(!(singlePorts.equals("")))
+            portOuput[j] = singlePorts;
         return  portOuput;
     }
 
