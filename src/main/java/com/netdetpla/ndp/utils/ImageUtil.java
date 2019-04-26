@@ -55,7 +55,7 @@ public class ImageUtil {
             String urlMerge = urlsjson[0];
             for(int i = 1;i<urls.length;i++)
                 urlMerge = urlMerge + "," +urlsjson[i];
-            param = "{\"taskID\":\""+id+"\",\"urls\":[" + urlMerge + "],\"taskName\":\"" + taskName + "\"}";
+            param = "{\"taskID\":\""+id+"\",\"urls\":[" + urlMerge + "],\"taskName\":\"" + taskName + "\",\"type\": \"excel\",\"filename\":\"filename\"}";
             System.out.println("无keyword的parm："+param);
             // TODO 处理任务添加失败
             DatabaseHandler.execute(
