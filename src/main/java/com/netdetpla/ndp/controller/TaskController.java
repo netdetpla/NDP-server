@@ -62,6 +62,8 @@ public class TaskController {
             case "scanservice":
                 scanservice(id,tidString,image_id,taskName,priority,params,24);
                 break;
+            case "scandns":
+                scandns(id,tidString,image_id,taskName,priority,params);
             default:
                 break;
         }

@@ -127,4 +127,30 @@ public class ImageUtil {
 
         }
     }
+
+    public static void scandns(int id, String tidString, int image_id, String taskName, String priority, String[] params) {
+        final Base64.Encoder encoder = Base64.getEncoder();
+
+        String[] ip = params[0].split(",");
+        String[] ips = ipSplit(ip,24);
+
+        for(int i=0;ips[i]!=null;i++){
+            String paramString = id + ";" + taskName + ";" + "0;" + ips[i] + ";" + id;
+            id++;
+            String paramBase64 = null;
+            try {
+                paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    paramBase64,
+                    priority
+            );
+        }
+    }
 }
