@@ -168,7 +168,10 @@ function getImages4Select() {
     let imageParam = {
         "scanweb":["ip"],
         "ecdsystem":["url","level","keyword"],
-        "scanservice":["ip","port"]
+        "scanservice":["ip","port"],
+        "info_shell":["ip", "script"],
+        "scanvul":["url"],
+        "scandns":["ip"]
     };
     $imageBody.empty("tr");
     $.get("image", {}, function (json) {

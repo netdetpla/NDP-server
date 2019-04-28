@@ -127,6 +127,32 @@ public class ImageUtil {
         }
     }
 
+    public static void info_shell(int id, String tidString, int image_id, String taskName, String priority, String[] params) {
+        final Base64.Encoder encoder = Base64.getEncoder();
+
+        String[] ips = params[0].split(",");
+        String script = params[1];
+
+        for(int i=0;ips[i]!=null;i++){
+            String paramString = "{\"task_id\":\"" + id + "\", \"task_name\":\"" + taskName + "\", \"vul_id\":\"1\", \"dst_ip\":\"" + ips[i] + "\"}" + "\n" + script;
+            id++;
+            String paramBase64 = null;
+            try {
+                paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    paramBase64,
+                    priority
+            );
+        }
+    }
+
     public static void scanvul(int id, String tidString, int image_id, String taskName, String priority, String[] params) {
         final Base64.Encoder encoder = Base64.getEncoder();
 
