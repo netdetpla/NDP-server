@@ -5,8 +5,7 @@ import com.netdetpla.ndp.handler.DatabaseHandler;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
-import static com.netdetpla.ndp.utils.IpUtil.ipSplit;
-import static com.netdetpla.ndp.utils.IpUtil.portSplit;
+import static com.netdetpla.ndp.utils.IpUtil.*;
 
 public class ImageUtil {
 
@@ -125,6 +124,33 @@ public class ImageUtil {
                 );
             }
 
+        }
+    }
+
+    public static void scanvul(int id, String tidString, int image_id, String taskName, String priority, String[] params) {
+        final Base64.Encoder encoder = Base64.getEncoder();
+
+        String[] url = params[0].split(",");
+        // 100个一组进行分割
+        String[] urls = urlSplit(url, 100);
+
+        for(int i=0;urls[i]!=null;i++){
+            String paramString = id + ";" + taskName + ";" + "0;" + "struts2;" + urls[i];
+            id++;
+            String paramBase64 = null;
+            try {
+                paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    paramBase64,
+                    priority
+            );
         }
     }
 

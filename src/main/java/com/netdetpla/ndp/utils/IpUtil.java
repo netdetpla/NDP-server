@@ -229,6 +229,43 @@ public class IpUtil {
 
 
     /**
+     * @param urlInput 待拆分的url
+     * @param subSize 拆分粒度
+     * @return 拆分结果
+     */
+    public static String[] urlSplit(String[] urlInput, int subSize) {
+        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize: urlInput.length / subSize + 1;
+        String[] urls = new String[count];
+
+        for (int i = 0; i < count; i++) {
+            String tmp = "";
+            if (count - i == 1) {
+                for (int j = i * subSize; j < urlInput.length; j++) {
+                    if (urlInput.length - j == 1) {
+                        tmp = tmp + urlInput[j];
+                    } else {
+                        tmp = tmp + urlInput[j] + ",";
+                    }
+                }
+            } else {
+                for (int j = i * subSize; j < (i + 1) * subSize; j++){
+                    if ((i + 1) * subSize - j == 1) {
+                        tmp = tmp + urlInput[j];
+                    } else {
+                        tmp = tmp + urlInput[j] + ",";
+                    }
+                }
+            }
+            urls[i] = tmp;
+        }
+//        for (int i = 0; i < urls.length; i++) {
+//            System.out.println(urls[i]);
+//        }
+        return urls;
+    }
+
+
+    /**
      * 功能：判断一个IP是不是在一个网段下的
      * 格式：isInRange("192.168.8.3", "192.168.9.10/22");
      */

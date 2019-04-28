@@ -64,6 +64,8 @@ public class TaskController {
                 break;
             case "scandns":
                 scandns(id,tidString,image_id,taskName,priority,params);
+            case "scanvul":
+                scanvul(id, tidString, image_id, taskName, priority, params);
             default:
                 break;
         }
