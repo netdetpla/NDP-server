@@ -171,7 +171,8 @@ function getImages4Select() {
         "scanservice":["ip","port"],
         "info_shell":["ip", "script"],
         "scanvul":["url"],
-        "scandns":["ip"]
+        "scandns":["ip"],
+        "dnssecure":["domains", "re_server"]
     };
     $imageBody.empty("tr");
     $.get("image", {}, function (json) {

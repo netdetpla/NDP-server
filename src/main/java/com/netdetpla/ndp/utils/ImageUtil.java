@@ -158,7 +158,7 @@ public class ImageUtil {
 
         String[] url = params[0].split(",");
         // 100个一组进行分割
-        String[] urls = urlSplit(url, 100);
+        String[] urls = urlSplit(url, 100, ",");
 
         for(int i=0;urls[i]!=null;i++){
             String paramString = id + ";" + taskName + ";" + "0;" + "struts2;" + urls[i];
@@ -188,6 +188,34 @@ public class ImageUtil {
 
         for(int i=0;ips[i]!=null;i++){
             String paramString = id + ";" + taskName + ";" + "0;" + ips[i] + ";" + id;
+            id++;
+            String paramBase64 = null;
+            try {
+                paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    paramBase64,
+                    priority
+            );
+        }
+    }
+
+    public static void dnssecure(int id, String tidString, int image_id, String taskName, String priority, String[] params) {
+        final Base64.Encoder encoder = Base64.getEncoder();
+
+        String[] domain = params[0].split("\\+");
+        String[] domains = urlSplit(domain, 100, "+");
+        String[] re_server = params[1].split("\\+");
+        String[] re_servers = urlSplit(re_server, 100, "+");
+
+        for(int i=0;domains[i]!=null;i++){
+            String paramString = id + ";" + domains[i] + ";" + re_servers[i] + ";" + taskName + ";" + id;
             id++;
             String paramBase64 = null;
             try {
