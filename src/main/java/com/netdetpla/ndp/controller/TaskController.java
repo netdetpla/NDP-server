@@ -33,8 +33,8 @@ public class TaskController {
         System.out.println("tag: " + tag);
         System.out.println("task-name: " + taskName);
         System.out.println("priority: " + priority);
-        for(int k=0;k<params.length;k++){
-            System.out.println("param"+k+"：" + params[k]);
+        for (int k = 0; k < params.length; k++) {
+            System.out.println("param" + k + "：" + params[k]);
         }
 
         ResultSet resultSet = DatabaseHandler.executeQuery(
@@ -48,22 +48,22 @@ public class TaskController {
         ResultSet resultSet2 = DatabaseHandler.executeQuery(
                 "select max(id),max(tid) from task");
         resultSet2.next();
-        int id = resultSet2.getInt(1)+1;
-        int tid = resultSet2.getInt(2)+1;
+        int id = resultSet2.getInt(1) + 1;
+        int tid = resultSet2.getInt(2) + 1;
         String tidString = String.valueOf(tid);
 
-        switch (imageName){
+        switch (imageName) {
             case "scanweb":
-                scanweb(id,tidString,image_id,taskName,priority,params,24);
+                scanweb(id, tidString, image_id, taskName, priority, params, 24);
                 break;
             case "ecdsystem":
-                ecdsystem(id,image_id,tidString,taskName,priority,params);
+                ecdsystem(id, image_id, tidString, taskName, priority, params);
                 break;
             case "scanservice":
-                scanservice(id,tidString,image_id,taskName,priority,params,24);
+                scanservice(id, tidString, image_id, taskName, priority, params, 24);
                 break;
             case "scandns":
-                scandns(id,tidString,image_id,taskName,priority,params);
+                scandns(id, tidString, image_id, taskName, priority, params);
             case "scanvul":
                 scanvul(id, tidString, image_id, taskName, priority, params);
             default:

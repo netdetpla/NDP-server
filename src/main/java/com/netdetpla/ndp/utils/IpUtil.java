@@ -53,54 +53,54 @@ public class IpUtil {
     /**
      * 端口port拆分
      */
-    public static String[] portSplit(String[] portInput){
-        int low,high,lowPlus;
+    public static String[] portSplit(String[] portInput) {
+        int low, high, lowPlus;
         int j = 0;
-        String[] portOuput = new String[100*100];
+        String[] portOuput = new String[100 * 100];
         String singlePorts = "";
-        for(int i=0;i<portInput.length;i++){
-            if(portInput[i].contains("-")){
+        for (int i = 0; i < portInput.length; i++) {
+            if (portInput[i].contains("-")) {
                 String[] portRange = portInput[i].split("-");
                 low = Integer.parseInt(portRange[0]);
                 high = Integer.parseInt(portRange[1]);
                 lowPlus = low + 99;
-                while(lowPlus<=high){
+                while (lowPlus <= high) {
                     portOuput[j++] = low + "-" + lowPlus;
                     low = low + 100;
                     lowPlus = low + 99;
                 }
-                if(low<high)
+                if (low < high)
                     portOuput[j++] = low + "-" + high;
-                else if(low==high){
-                    if(singlePorts.equals("")){
-                        singlePorts = low +"";
-                    }else{
+                else if (low == high) {
+                    if (singlePorts.equals("")) {
+                        singlePorts = low + "";
+                    } else {
                         singlePorts = singlePorts + "," + low;
                     }
                 }
-            }else{
-                if(singlePorts.equals("")){
+            } else {
+                if (singlePorts.equals("")) {
                     singlePorts = portInput[i];
-                }else{
+                } else {
                     singlePorts = singlePorts + "," + portInput[i];
                 }
             }
         }
-        if(!(singlePorts.equals("")))
+        if (!(singlePorts.equals("")))
             portOuput[j] = singlePorts;
-        return  portOuput;
+        return portOuput;
     }
 
 
     /**
      * ip拆分，根据不同拆分粒度拆分任务输入ip段
      */
-    public  static String[] ipSplit(String[] ipInput,int num){
+    public static String[] ipSplit(String[] ipInput, int num) {
         String[] ipInputSplit = ipInput;
-        String[] ips =new String[256*256];
+        String[] ips = new String[256 * 256];
         int j = 0;
-        for(int i=0;i<ipInputSplit.length;i++){
-            if(ipInputSplit[i].contains("/")){
+        for (int i = 0; i < ipInputSplit.length; i++) {
+            if (ipInputSplit[i].contains("/")) {
                 String[] ipAndmask = ipInputSplit[i].split("/");
                 String ip = ipAndmask[0];
                 String mask = ipAndmask[1];
@@ -108,94 +108,94 @@ public class IpUtil {
                 int[] ipsplitInt = new int[4];
                 for (int k = 0; k < ipsplit.length; k++)
                     ipsplitInt[k] = Integer.parseInt(ipsplit[k]);
-                Double endIpDou=ipToDouble(getEndIpStr(ip, mask));
+                Double endIpDou = ipToDouble(getEndIpStr(ip, mask));
 
-                if(Integer.parseInt(mask)<num){
+                if (Integer.parseInt(mask) < num) {
                     ips[j++] = ip + "/" + num;
-                    String endIp = getEndIpStr(ip,String.valueOf(num));
-                    while(ipToDouble(endIp)<endIpDou){
-                        if(num>=24){
-                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"24"))){
+                    String endIp = getEndIpStr(ip, String.valueOf(num));
+                    while (ipToDouble(endIp) < endIpDou) {
+                        if (num >= 24) {
+                            if (ipToDouble(endIp) < ipToDouble(getEndIpStr(ip, "24"))) {
                                 String[] endIpSplit = endIp.split("\\.");
-                                ipsplitInt[3] = Integer.parseInt(endIpSplit[3])+1;
+                                ipsplitInt[3] = Integer.parseInt(endIpSplit[3]) + 1;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else if(ipsplitInt[2]<255){
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else if (ipsplitInt[2] < 255) {
                                 ipsplitInt[2]++;
                                 ipsplitInt[3] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" +num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else if(ipsplitInt[1]<255){
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else if (ipsplitInt[1] < 255) {
                                 ipsplitInt[1]++;
                                 ipsplitInt[2] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else{
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else {
                                 ipsplitInt[0]++;
                                 ipsplitInt[1] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
+                                endIp = getEndIpStr(ip, String.valueOf(num));
                             }
-                        }else if (num>=16){
-                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"16"))){
+                        } else if (num >= 16) {
+                            if (ipToDouble(endIp) < ipToDouble(getEndIpStr(ip, "16"))) {
                                 String[] endIpSplit = endIp.split("\\.");
-                                ipsplitInt[2] = Integer.parseInt(endIpSplit[2])+1;
+                                ipsplitInt[2] = Integer.parseInt(endIpSplit[2]) + 1;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else if(ipsplitInt[1]<255){
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else if (ipsplitInt[1] < 255) {
                                 ipsplitInt[1]++;
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else{
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else {
                                 ipsplitInt[0]++;
                                 ipsplitInt[1] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
+                                endIp = getEndIpStr(ip, String.valueOf(num));
                             }
-                        }else if (num>=8){
-                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"8"))){
+                        } else if (num >= 8) {
+                            if (ipToDouble(endIp) < ipToDouble(getEndIpStr(ip, "8"))) {
                                 String[] endIpSplit = endIp.split("\\.");
-                                ipsplitInt[1] = Integer.parseInt(endIpSplit[1])+1;
+                                ipsplitInt[1] = Integer.parseInt(endIpSplit[1]) + 1;
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }else{
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            } else {
                                 ipsplitInt[0]++;
-                                ipsplitInt[1] = 0;
-                                ipsplitInt[2] = 0;
-                                ipsplitInt[3] = 0;
-                                ip =  ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
-                            }
-                        }else if (num>0){
-                            if(ipToDouble(endIp)<ipToDouble(getEndIpStr(ip,"1"))){
-                                String[] endIpSplit = endIp.split("\\.");
-                                ipsplitInt[0] = Integer.parseInt(endIpSplit[0])+1;
                                 ipsplitInt[1] = 0;
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
                                 ips[j++] = ip + "/" + num;
-                                endIp = getEndIpStr(ip,String.valueOf(num));
+                                endIp = getEndIpStr(ip, String.valueOf(num));
+                            }
+                        } else if (num > 0) {
+                            if (ipToDouble(endIp) < ipToDouble(getEndIpStr(ip, "1"))) {
+                                String[] endIpSplit = endIp.split("\\.");
+                                ipsplitInt[0] = Integer.parseInt(endIpSplit[0]) + 1;
+                                ipsplitInt[1] = 0;
+                                ipsplitInt[2] = 0;
+                                ipsplitInt[3] = 0;
+                                ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
+                                ips[j++] = ip + "/" + num;
+                                endIp = getEndIpStr(ip, String.valueOf(num));
                             }
                         }
                     }
 
-                }else{
-                    ips[j++]=ip+"/"+mask;
+                } else {
+                    ips[j++] = ip + "/" + mask;
                 }
 //                if(Integer.parseInt(mask)<24){
 //                    ips[j++] = ip + "/" + 24;
@@ -220,21 +220,21 @@ public class IpUtil {
 //                }else{
 //                    ips[j++]=ip+"/"+mask;
 //                }
-            }else{
+            } else {
                 ips[j++] = ipInputSplit[i];
             }
         }
-        return  ips;
+        return ips;
     }
 
 
     /**
      * @param urlInput 待拆分的url
-     * @param subSize 拆分粒度
+     * @param subSize  拆分粒度
      * @return 拆分结果
      */
     public static String[] urlSplit(String[] urlInput, int subSize) {
-        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize: urlInput.length / subSize + 1;
+        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize : urlInput.length / subSize + 1;
         String[] urls = new String[count];
 
         for (int i = 0; i < count; i++) {
@@ -248,7 +248,7 @@ public class IpUtil {
                     }
                 }
             } else {
-                for (int j = i * subSize; j < (i + 1) * subSize; j++){
+                for (int j = i * subSize; j < (i + 1) * subSize; j++) {
                     if ((i + 1) * subSize - j == 1) {
                         tmp = tmp + urlInput[j];
                     } else {
@@ -290,20 +290,20 @@ public class IpUtil {
      * 功能：根据IP和位数返回该IP网段的所有IP
      * 格式：parseIpMaskRange("192.192.192.1.", "23")
      */
-    public static List<String> parseIpMaskRange(String ip,String mask){
-        List<String> list=new ArrayList<>();
+    public static List<String> parseIpMaskRange(String ip, String mask) {
+        List<String> list = new ArrayList<>();
         if ("32".equals(mask)) {
             list.add(ip);
-        }else{
-            String startIp=getBeginIpStr(ip, mask);
-            String endIp=getEndIpStr(ip, mask);
+        } else {
+            String startIp = getBeginIpStr(ip, mask);
+            String endIp = getEndIpStr(ip, mask);
             if (!"31".equals(mask)) {
-                String subStart=startIp.split("\\.")[0]+"."+startIp.split("\\.")[1]+"."+startIp.split("\\.")[2]+".";
-                String subEnd=endIp.split("\\.")[0]+"."+endIp.split("\\.")[1]+"."+endIp.split("\\.")[2]+".";
-                startIp=subStart+(Integer.parseInt(startIp.split("\\.")[3])+1);
-                endIp=subEnd+(Integer.parseInt(endIp.split("\\.")[3])-1);
+                String subStart = startIp.split("\\.")[0] + "." + startIp.split("\\.")[1] + "." + startIp.split("\\.")[2] + ".";
+                String subEnd = endIp.split("\\.")[0] + "." + endIp.split("\\.")[1] + "." + endIp.split("\\.")[2] + ".";
+                startIp = subStart + (Integer.parseInt(startIp.split("\\.")[3]) + 1);
+                endIp = subEnd + (Integer.parseInt(endIp.split("\\.")[3]) - 1);
             }
-            list=parseIpRange(startIp, endIp);
+            list = parseIpRange(startIp, endIp);
         }
         return list;
     }
@@ -357,22 +357,21 @@ public class IpUtil {
      * @param ip
      * @return
      */
-    public static String getIpFromLong(Long ip)
-    {
+    public static String getIpFromLong(Long ip) {
         String s1 = String.valueOf((ip & 4278190080L) / 16777216L);
         String s2 = String.valueOf((ip & 16711680L) / 65536L);
         String s3 = String.valueOf((ip & 65280L) / 256L);
         String s4 = String.valueOf(ip & 255L);
         return s1 + "." + s2 + "." + s3 + "." + s4;
     }
+
     /**
      * 把xx.xx.xx.xx类型的转为long类型的
      *
      * @param ip
      * @return
      */
-    public static Long getIpFromString(String ip)
-    {
+    public static Long getIpFromString(String ip) {
         Long ipLong = 0L;
         String ipTemp = ip;
         ipLong = ipLong * 256
@@ -387,69 +386,58 @@ public class IpUtil {
         ipLong = ipLong * 256 + Long.parseLong(ipTemp);
         return ipLong;
     }
+
     /**
      * 根据掩码位获取掩码
      *
-     * @param maskBit
-     *            掩码位数，如"28"、"30"
+     * @param maskBit 掩码位数，如"28"、"30"
      * @return
      */
-    public static String getMaskByMaskBit(String maskBit)
-    {
+    public static String getMaskByMaskBit(String maskBit) {
         return "".equals(maskBit) ? "error, maskBit is null !" : getMaskMap(maskBit);
     }
 
     /**
      * 根据 ip/掩码位 计算IP段的起始IP 如 IP串 218.240.38.69/30
      *
-     * @param ip
-     *            给定的IP，如218.240.38.69
-     * @param maskBit
-     *            给定的掩码位，如30
+     * @param ip      给定的IP，如218.240.38.69
+     * @param maskBit 给定的掩码位，如30
      * @return 起始IP的字符串表示
      */
-    public static String getBeginIpStr(String ip, String maskBit)
-    {
+    public static String getBeginIpStr(String ip, String maskBit) {
         return getIpFromLong(getBeginIpLong(ip, maskBit));
     }
+
     /**
      * 根据 ip/掩码位 计算IP段的起始IP 如 IP串 218.240.38.69/30
      *
-     * @param ip
-     *            给定的IP，如218.240.38.69
-     * @param maskBit
-     *            给定的掩码位，如30
+     * @param ip      给定的IP，如218.240.38.69
+     * @param maskBit 给定的掩码位，如30
      * @return 起始IP的长整型表示
      */
-    public static Long getBeginIpLong(String ip, String maskBit)
-    {
+    public static Long getBeginIpLong(String ip, String maskBit) {
         return getIpFromString(ip) & getIpFromString(getMaskByMaskBit(maskBit));
     }
+
     /**
      * 根据 ip/掩码位 计算IP段的终止IP 如 IP串 218.240.38.69/30
      *
-     * @param ip
-     *            给定的IP，如218.240.38.69
-     * @param maskBit
-     *            给定的掩码位，如30
+     * @param ip      给定的IP，如218.240.38.69
+     * @param maskBit 给定的掩码位，如30
      * @return 终止IP的字符串表示
      */
-    public static String getEndIpStr(String ip, String maskBit)
-    {
+    public static String getEndIpStr(String ip, String maskBit) {
         return getIpFromLong(getEndIpLong(ip, maskBit));
     }
 
     /**
      * 根据 ip/掩码位 计算IP段的终止IP 如 IP串 218.240.38.69/30
      *
-     * @param ip
-     *            给定的IP，如218.240.38.69
-     * @param maskBit
-     *            给定的掩码位，如30
+     * @param ip      给定的IP，如218.240.38.69
+     * @param maskBit 给定的掩码位，如30
      * @return 终止IP的长整型表示
      */
-    public static Long getEndIpLong(String ip, String maskBit)
-    {
+    public static Long getEndIpLong(String ip, String maskBit) {
         return getBeginIpLong(ip, maskBit)
                 + ~getIpFromString(getMaskByMaskBit(maskBit));
     }
@@ -461,23 +449,19 @@ public class IpUtil {
      * @param netmarks
      * @return
      */
-    public static int getNetMask(String netmarks)
-    {
+    public static int getNetMask(String netmarks) {
         StringBuilder sbf;
         String str;
         int inetmask = 0;
         int count = 0;
         String[] ipList = netmarks.split("\\.");
-        for (int n = 0; n < ipList.length; n++)
-        {
+        for (int n = 0; n < ipList.length; n++) {
             sbf = toBin(Integer.parseInt(ipList[n]));
             str = sbf.reverse().toString();
             count = 0;
-            for (int i = 0; i < str.length(); i++)
-            {
+            for (int i = 0; i < str.length(); i++) {
                 i = str.indexOf('1', i);
-                if (i == -1)
-                {
+                if (i == -1) {
                     break;
                 }
                 count++;
@@ -491,24 +475,20 @@ public class IpUtil {
      * 计算子网大小
      *
      * @param
-     *
      * @return
      */
-    public static int getPoolMax(int maskBit)
-    {
-        if (maskBit <= 0 || maskBit >= 32)
-        {
+    public static int getPoolMax(int maskBit) {
+        if (maskBit <= 0 || maskBit >= 32) {
             return 0;
         }
         return (int) Math.pow(2, 32 - maskBit) - 2;
     }
-    private static StringBuilder toBin(int x)
-    {
+
+    private static StringBuilder toBin(int x) {
         StringBuilder result = new StringBuilder();
         result.append(x % 2);
         x /= 2;
-        while (x > 0)
-        {
+        while (x > 0) {
             result.append(x % 2);
             x /= 2;
         }
