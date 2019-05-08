@@ -62,10 +62,14 @@ public class TaskController {
             case "scanservice":
                 scanservice(id, tidString, image_id, taskName, priority, params, 24);
                 break;
+            case "info_shell":
+                info_shell(id,tidString,image_id,taskName,priority,params);
             case "scandns":
                 scandns(id, tidString, image_id, taskName, priority, params);
             case "scanvul":
                 scanvul(id, tidString, image_id, taskName, priority, params);
+            case "dnssecure":
+                dnssecure(id, tidString, image_id, taskName, priority, params);
             default:
                 break;
         }

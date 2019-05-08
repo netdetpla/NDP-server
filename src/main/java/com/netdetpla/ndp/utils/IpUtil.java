@@ -230,11 +230,12 @@ public class IpUtil {
 
     /**
      * @param urlInput 待拆分的url
-     * @param subSize  拆分粒度
+     * @param subSize 拆分粒度
+     * @param separator 分隔符
      * @return 拆分结果
      */
-    public static String[] urlSplit(String[] urlInput, int subSize) {
-        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize : urlInput.length / subSize + 1;
+    public static String[] urlSplit(String[] urlInput, int subSize, String separator) {
+        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize: urlInput.length / subSize + 1;
         String[] urls = new String[count];
 
         for (int i = 0; i < count; i++) {
@@ -244,7 +245,7 @@ public class IpUtil {
                     if (urlInput.length - j == 1) {
                         tmp = tmp + urlInput[j];
                     } else {
-                        tmp = tmp + urlInput[j] + ",";
+                        tmp = tmp + urlInput[j] + separator;
                     }
                 }
             } else {
@@ -252,7 +253,7 @@ public class IpUtil {
                     if ((i + 1) * subSize - j == 1) {
                         tmp = tmp + urlInput[j];
                     } else {
-                        tmp = tmp + urlInput[j] + ",";
+                        tmp = tmp + urlInput[j] + separator;
                     }
                 }
             }
