@@ -215,7 +215,7 @@ public class ImageUtil {
         String[] re_servers = urlSplit(re_server, 100, "+");
 
         for(int i=0;domains[i]!=null;i++){
-            String paramString = id + ";" + domains[i] + ";" + re_servers[i] + ";" + taskName + ";" + id;
+            String paramString = id + "," + domains[i] + "," + re_servers[i] + "," + taskName + "," + id;
             id++;
             String paramBase64 = null;
             try {
