@@ -16,7 +16,7 @@ public class ImageUtil {
         //ip切分，把任务切分为小任务
         String[] ips = ipSplit(params, 24);
 
-        for (int i = 0; ips[i] != null; i++) {
+        for (int i = 0; i < ips.length; i++) {
             System.out.println(ips[i]);
             int idnew = id + i;
             String paramString = idnew + ";" + taskName + ";0;1;" + ips[i] + ";" + idnew;
@@ -103,8 +103,8 @@ public class ImageUtil {
         //port切分，把任务切分为小任务
         String[] ports = portSplit(port);
 
-        for (int i = 0; ips[i] != null; i++) {
-            for (int j = 0; ports[j] != null; j++) {
+        for (int i = 0; i < ips.length; i++) {
+            for (int j = 0; j < ports.length; j++) {
                 String paramString = id + ";" + taskName + ";0;" + ports[j] + ";1;0;;" + ips[i] + ";" + id;
                 id++;
                 String paramBase64 = null;
@@ -133,7 +133,7 @@ public class ImageUtil {
         String[] ips = params[0].split(",");
         String script = params[1];
 
-        for (int i = 0; ips[i] != null; i++) {
+        for (int i = 0; i < ips.length; i++) {
             String paramString = "{\"task_id\":\"" + id + "\", \"task_name\":\"" + taskName + "\", \"vul_id\":\"1\", \"dst_ip\":\"" + ips[i] + "\"}" + "\n" + script;
             id++;
             String paramBase64 = null;
@@ -160,7 +160,7 @@ public class ImageUtil {
         // 100个一组进行分割
         String[] urls = urlSplit(url, 100, ",");
 
-        for (int i = 0; urls[i] != null; i++) {
+        for (int i = 0; i < urls.length; i++) {
             String paramString = id + ";" + taskName + ";" + "0;" + "struts2;" + urls[i];
             id++;
             String paramBase64 = null;
@@ -186,7 +186,7 @@ public class ImageUtil {
         String[] ip = params[0].split(",");
         String[] ips = ipSplit(ip, 24);
 
-        for (int i = 0; ips[i] != null; i++) {
+        for (int i = 0; i < ips.length; i++) {
             String paramString = id + ";" + taskName + ";" + "0;" + ips[i] + ";" + id;
             id++;
             String paramBase64 = null;
@@ -214,7 +214,7 @@ public class ImageUtil {
         String[] re_server = params[1].split("\\+");
         String[] re_servers = urlSplit(re_server, 100, "+");
 
-        for(int i=0;domains[i]!=null;i++){
+        for(int i=0; i < domain.length; i++){
             String paramString = id + "," + domains[i] + "," + re_servers[i] + "," + taskName + "," + id;
             id++;
             String paramBase64 = null;
