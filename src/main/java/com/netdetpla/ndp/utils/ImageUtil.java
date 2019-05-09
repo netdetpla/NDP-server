@@ -215,22 +215,24 @@ public class ImageUtil {
         String[] re_servers = urlSplit(re_server, 100, "+");
 
         for(int i=0; i < domain.length; i++){
-            String paramString = id + "," + domains[i] + "," + re_servers[i] + "," + taskName + "," + id;
-            id++;
-            String paramBase64 = null;
-            try {
-                paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            for(int j=0; j < re_servers.length; j++) {
+                String paramString = id + "," + domains[i] + "," + re_servers[j] + "," + taskName + "," + id;
+                id++;
+                String paramBase64 = null;
+                try {
+                    paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                DatabaseHandler.execute(
+                        "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                        tidString,
+                        taskName,
+                        Integer.toString(image_id),
+                        paramBase64,
+                        priority
+                );
             }
-            DatabaseHandler.execute(
-                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
-                    tidString,
-                    taskName,
-                    Integer.toString(image_id),
-                    paramBase64,
-                    priority
-            );
         }
     }
 }
