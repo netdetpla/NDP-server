@@ -54,41 +54,20 @@ public class IpUtil {
      * 端口port拆分
      */
     public static String[] portSplit(String[] portInput) {
-        int low, high, lowPlus;
-        int j = 0;
-        String[] portOuput = new String[100 * 100];
-        String singlePorts = "";
+        ArrayList<String> portList = new ArrayList<>();
         for (int i = 0; i < portInput.length; i++) {
             if (portInput[i].contains("-")) {
-                String[] portRange = portInput[i].split("-");
-                low = Integer.parseInt(portRange[0]);
-                high = Integer.parseInt(portRange[1]);
-                lowPlus = low + 99;
-                while (lowPlus <= high) {
-                    portOuput[j++] = low + "-" + lowPlus;
-                    low = low + 100;
-                    lowPlus = low + 99;
-                }
-                if (low < high)
-                    portOuput[j++] = low + "-" + high;
-                else if (low == high) {
-                    if (singlePorts.equals("")) {
-                        singlePorts = low + "";
-                    } else {
-                        singlePorts = singlePorts + "," + low;
-                    }
+                int low = Integer.parseInt(portInput[i].split("-")[0]);
+                int high = Integer.parseInt(portInput[i].split("-")[1]);
+                for (; low <= high; low++) {
+                    portList.add(low + "");
                 }
             } else {
-                if (singlePorts.equals("")) {
-                    singlePorts = portInput[i];
-                } else {
-                    singlePorts = singlePorts + "," + portInput[i];
-                }
+                portList.add(portInput[i]);
             }
         }
-        if (!(singlePorts.equals("")))
-            portOuput[j] = singlePorts;
-        return portOuput;
+        String[] result = new String[portList.size()];
+        return portList.toArray(result);
     }
 
 

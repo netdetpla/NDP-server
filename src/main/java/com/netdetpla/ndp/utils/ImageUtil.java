@@ -90,18 +90,11 @@ public class ImageUtil {
         String[] ip = params[0].split(",");
         String[] port = params[1].split(",");
 
-        for (int i = 0; i < ip.length; i++) {
-            System.out.println("ip[i]:" + ip[i]);
-        }
-        for (int i = 0; i < port.length; i++) {
-            System.out.println("port[i]:" + port[i]);
-        }
-
         //ip切分，把任务切分为小任务
         String[] ips = ipSplit(ip, 24);
 
         //port切分，把任务切分为小任务
-        String[] ports = portSplit(port);
+        String[] ports = urlSplit(portSplit(port), 100, ",");
 
         for (int i = 0; i < ips.length; i++) {
             for (int j = 0; j < ports.length; j++) {
