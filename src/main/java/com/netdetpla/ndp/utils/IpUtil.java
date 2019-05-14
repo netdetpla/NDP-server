@@ -76,7 +76,8 @@ public class IpUtil {
      */
     public static String[] ipSplit(String[] ipInput, int num) {
         String[] ipInputSplit = ipInput;
-        String[] ips = new String[256 * 256];
+//        String[] ips = new String[256 * 256];
+        ArrayList<String> ips = new ArrayList<>();
         int j = 0;
         for (int i = 0; i < ipInputSplit.length; i++) {
             if (ipInputSplit[i].contains("/")) {
@@ -90,7 +91,8 @@ public class IpUtil {
                 Double endIpDou = ipToDouble(getEndIpStr(ip, mask));
 
                 if (Integer.parseInt(mask) < num) {
-                    ips[j++] = ip + "/" + num;
+//                    ips[j++] = ip + "/" + num;
+                    ips.add(ip + "/" + num);
                     String endIp = getEndIpStr(ip, String.valueOf(num));
                     while (ipToDouble(endIp) < endIpDou) {
                         if (num >= 24) {
@@ -98,25 +100,29 @@ public class IpUtil {
                                 String[] endIpSplit = endIp.split("\\.");
                                 ipsplitInt[3] = Integer.parseInt(endIpSplit[3]) + 1;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else if (ipsplitInt[2] < 255) {
                                 ipsplitInt[2]++;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else if (ipsplitInt[1] < 255) {
                                 ipsplitInt[1]++;
                                 ipsplitInt[2] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else {
                                 ipsplitInt[0]++;
                                 ipsplitInt[1] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             }
                         } else if (num >= 16) {
@@ -125,20 +131,23 @@ public class IpUtil {
                                 ipsplitInt[2] = Integer.parseInt(endIpSplit[2]) + 1;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else if (ipsplitInt[1] < 255) {
                                 ipsplitInt[1]++;
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else {
                                 ipsplitInt[0]++;
                                 ipsplitInt[1] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             }
                         } else if (num >= 8) {
@@ -148,7 +157,8 @@ public class IpUtil {
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             } else {
                                 ipsplitInt[0]++;
@@ -156,7 +166,8 @@ public class IpUtil {
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             }
                         } else if (num > 0) {
@@ -167,14 +178,16 @@ public class IpUtil {
                                 ipsplitInt[2] = 0;
                                 ipsplitInt[3] = 0;
                                 ip = ipsplitInt[0] + "." + ipsplitInt[1] + "." + ipsplitInt[2] + "." + ipsplitInt[3];
-                                ips[j++] = ip + "/" + num;
+//                                ips[j++] = ip + "/" + num;
+                                ips.add(ip + "/" + num);
                                 endIp = getEndIpStr(ip, String.valueOf(num));
                             }
                         }
                     }
 
                 } else {
-                    ips[j++] = ip + "/" + mask;
+//                    ips[j++] = ip + "/" + mask;
+                    ips.add(ip + "/" + mask);
                 }
 //                if(Integer.parseInt(mask)<24){
 //                    ips[j++] = ip + "/" + 24;
@@ -200,10 +213,13 @@ public class IpUtil {
 //                    ips[j++]=ip+"/"+mask;
 //                }
             } else {
-                ips[j++] = ipInputSplit[i];
+//                ips[j++] = ipInputSplit[i];
+                ips.add(ipInputSplit[i]);
             }
         }
-        return ips;
+        String[] result = new String[ips.size()];
+//        return ips;
+        return ips.toArray(result);
     }
 
 
