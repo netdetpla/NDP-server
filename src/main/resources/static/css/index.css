@@ -16,7 +16,7 @@
     z-index: 3;
 }
 
-#subTaskCard{
+#subTaskCard, #subResultCard{
     display: none;
     position: absolute;
     width: 1000px;

@@ -22,6 +22,7 @@
         <div class="side-type-text">任务管理</div>
         <div class="collection blue darken-1 sidebar" style="border: 0;">
             <a href="#taskTable" class="collection-item blue darken-1 active" id="taskTableLink">任务列表</a>
+            <a href="#resultTable" class="collection-item blue darken-1 active" id="resultTableLink">结果列表</a>
             <a href="#taskCreate" class="collection-item blue darken-1 active">新建任务</a>
         </div>
     </div>
@@ -132,6 +133,39 @@
             </div>
         </div>
     </div>
+    <!--  结果展示  -->
+    <div class="col s10 hide full-height" id="resultTable">
+        <div class="row full-height">
+            <div class="col s3 full-height blue lighten-5">
+                <div>
+                    <h5>镜像列表</h5>
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>镜像名称</th>
+                        </tr>
+                        </thead>
+                        <tbody id="image4ResultTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col s1"></div>
+            <div class="col s9">
+                <h5 id="resultTitle"><span></span>对应结果列表</h5>
+                <table class="highlight">
+                    <thead>
+                    <tr>
+                        <th>结果ID</th>
+                        <th>任务ID</th>
+                    </tr>
+                    </thead>
+                    <tbody id="resultTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!--任务创建-->
     <div class="col s10 hide" id="taskCreate">
         <h5>任务创建</h5>
@@ -235,7 +269,20 @@
             </tbody>
         </table>
         <div class="card-action center">
-            <a id="cancelSubTask" class="waves-effect waves-light btn blue darken-1">取消</a>
+            <a id="cancelSubTask" class="waves-effect waves-light btn blue darken-1">确定</a>
+        </div>
+    </div>
+</div>
+<!--结果详情-->
+<div class="card horizontal" id="subResultCard">
+    <div class="card-content">
+        <span class="card-title">结果详情</span>
+        <div class="table-content row">
+            <table class="highlight col s8" id="subResultTable">
+            </table>
+        </div>
+        <div class="card-action center">
+            <a id="cancelSubResult" class="waves-effect waves-light btn blue darken-1">确定</a>
         </div>
     </div>
 </div>

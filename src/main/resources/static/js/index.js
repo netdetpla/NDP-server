@@ -12,6 +12,7 @@ function handleClickSideItem() {
     }
     $(href).removeClass("hide");
 }
+
 // 卡片显示及动画
 function openCard($card) {
     $card.css("display", "block");
@@ -19,6 +20,7 @@ function openCard($card) {
     $mask.css("z-index", "2");
     $mask.css("background-color", "rgba(0, 0, 0, 0.5)");
 }
+
 // 卡片关闭及动画
 function closeCard($card) {
     $card.css("display", "none");
@@ -28,6 +30,7 @@ function closeCard($card) {
         $mask.css("z-index", "-1");
     })
 }
+
 function getImageDetail(imageName, tag) {
     $.get(["image", imageName, tag].join("/"), {}, function (json) {
         $("#IDCImageName").html(json.data["image-name"]);
@@ -41,26 +44,40 @@ function getImageDetail(imageName, tag) {
         $("#imageDetailTitle").html([imageName, tag].join(":"));
     });
 }
+
 //2019.4.15添加子任务弹窗功能
-function  getSubTask(imageName,tid,task_name){
-    $("#subTaskTitle").html(imageName+":"+task_name+"  子任务列表");
+function getSubTask(imageName, tid, task_name) {
+    $("#subTaskTitle").html(imageName + ":" + task_name + "  子任务列表");
     let $subTaskBody = $("#subTaskTableBody");
     $subTaskBody.empty("tr");
-    $.get("task/" + imageName+"/"+task_name, {}, function (json) {
+    $.get("task/" + imageName + "/" + task_name, {}, function (json) {
         let data = json.data;
         for (let i = 0; i < data.length; i++) {
             $subTaskBody.append("<tr></tr>");
             let $row = $subTaskBody.find("tr:last");
-            $row.append("<td>" + (data[i].id || "")+ "</td>");
+            $row.append("<td>" + (data[i].id || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['param'] || "") + "</td>");
             $row.append("<td>" + (data[i]['task-status'] || "") + "</td>");
             $row.append("<td>" + (data[i]['priority'] || "") + "</td>");
         }
-    })
+    });
 }
 
+function getSubResult(imageName, rid) {
+    let $subResultBody = $("#subResultTable");
+    $subResultBody.empty("tr");
+    $.get("result/" + imageName + "/" + rid, {}, function (json) {
+        let data = json.data;
+        for (let i = 0; i < data.length; i++) {
+            $subResultBody.append("<tr></tr>");
+            let $row = $subResultBody.find("tr:last");
+            $row.append("<th>" + data[i][0] + "</th>");
+            $row.append("<td>" + data[i][1] + "</td>");
+        }
+    });
+}
 
 function getTags(imageName) {
     $("#tagTitle").find("span:first").html(imageName);
@@ -82,6 +99,7 @@ function getTags(imageName) {
         }
     })
 }
+
 function getImages() {
     let $imageBody = $("#imageTableBody");
     $imageBody.empty("tr");
@@ -98,6 +116,7 @@ function getImages() {
         }
     });
 }
+
 function submitImage() {
     // Get form
     let data = new FormData();
@@ -127,6 +146,7 @@ function submitImage() {
         }
     });
 }
+
 function getTasks(imageName) {
     $("#taskTitle").find("span:first").html(imageName);
     let $taskBody = $("#taskTableBody");
@@ -136,7 +156,7 @@ function getTasks(imageName) {
         for (let i = 0; i < data.length; i++) {
             $taskBody.append("<tr></tr>");
             let $row = $taskBody.find("tr:last");
-            $row.append("<td>" + (data[i]['tid'] || "")  + "</td>");
+            $row.append("<td>" + (data[i]['tid'] || "") + "</td>");
             $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
             $row.append("<td>" + (data[i]['end-time'] || "") + "</td>");
@@ -145,8 +165,28 @@ function getTasks(imageName) {
                 openCard($("#subTaskCard"));
             });
         }
-    })
+    });
 }
+
+function getResult(imageName) {
+    $("#resultTitle").find("span:first").html(imageName);
+    let $resultBody = $("#resultTableBody");
+    $resultBody.empty("tr");
+    $.get("result/" + imageName, {}, function (json) {
+        let data = json.data;
+        for (let i = 0; i < data.length; i++) {
+            $resultBody.append("<tr></tr>");
+            let $row = $resultBody.find("tr:last");
+            $row.append("<td>" + (data[i]['rid'] || "") + "</td>");
+            $row.append("<td>" + (data[i]['tid'] || "") + "</td>");
+            $row.on("click", function () {
+                getSubResult(imageName, $(this).find("td:first").html());
+                openCard($("#subResultCard"));
+            });
+        }
+    });
+}
+
 function getImages4Task() {
     let $imageBody = $("#image4TaskTableBody");
     $imageBody.empty("tr");
@@ -163,16 +203,34 @@ function getImages4Task() {
         }
     });
 }
+
+function getImages4Result() {
+    let $imageBody = $("#image4ResultTableBody");
+    $imageBody.empty("tr");
+    $.get("image", {}, function (json) {
+        // json = JSON.parse(jsonStr);
+        let data = json.data;
+        for (let i = 0; i < data.length; i++) {
+            $imageBody.append("<tr></tr>");
+            let $row = $imageBody.find("tr:last");
+            $row.append("<td>" + data[i] + "</td>");
+            $row.on("click", function () {
+                getResult($(this).find("td:first").html());
+            });
+        }
+    });
+}
+
 function getImages4Select() {
     let $imageBody = $("#selectImageTableBody");
     let imageParam = {
-        "scanweb":["ip"],
-        "ecdsystem":["url","level","keyword"],
-        "scanservice":["ip","port"],
-        "info_shell":["ip", "script"],
-        "scanvul":["url"],
-        "scandns":["ip"],
-        "dnssecure":["domains", "re_server"]
+        "scanweb": ["ip"],
+        "ecdsystem": ["url", "level", "keyword"],
+        "scanservice": ["ip", "port"],
+        "info_shell": ["ip", "script"],
+        "scanvul": ["url"],
+        "scandns": ["ip"],
+        "dnssecure": ["domains", "re_server"]
     };
     $imageBody.empty("tr");
     $.get("image", {}, function (json) {
@@ -192,15 +250,15 @@ function getImages4Select() {
         }
     });
 }
+
 //根据不同镜像，显示不同参数输入框
-function paramChange(params){
+function paramChange(params) {
     let $paramDiv = $('#paramDiv');
     $paramDiv.empty();
-    for(let i=0;i<params.length;i++){
-        $paramDiv.append("<div class=\"input-field\">\n" +
-            "                 <input id=\""+params[i]+"\" type=\"text\" name=\""+params[i]+"\" className=\"validate\">\n" +
-            "                 <label for=\""+params[i]+"\">"+params[i]+"</label>\n" +
-            "             </div>\n")
+    for (let i = 0; i < params.length; i++) {
+        $paramDiv.append("<div class=\"input-field\">" +
+            "<input id=\"" + params[i] + "\" type=\"text\" name=\"" + params[i] + "\" class=\"validate\">" +
+            "<label for=\"" + params[i] + "\">" + params[i] + "</label></div>")
     }
 }
 
@@ -220,6 +278,7 @@ function getTags4Select(imageName) {
         }
     })
 }
+
 function resetCreateTask() {
     $("#selectImage").html("选择镜像");
     $("#selectTag").addClass("disabled").html("选择标签");
@@ -229,12 +288,13 @@ function resetCreateTask() {
     $("#url").val("");
     $("#level").val("");
     $("#keyword").val("");
-    $("#paramshow").css('display','block');
-    $("#ipshow").css('display','none');
-    for (let j = 1;j < 4; j++)
-        $("#ecdsystem"+j).css('display','none')
+    $("#paramshow").css('display', 'block');
+    $("#ipshow").css('display', 'none');
+    for (let j = 1; j < 4; j++)
+        $("#ecdsystem" + j).css('display', 'none')
 }
-function  submitTask() {
+
+function submitTask() {
     let data = new FormData();
     data.append("image-name", $("#selectImage").html());
     data.append("tag", $("#selectTag").html());
@@ -243,8 +303,8 @@ function  submitTask() {
     let params = [];
     $("#paramDiv input").each(function () {
         params.push(this.value);
-    })
-    for(let i=0;i<params.length;i++){
+    });
+    for (let i = 0; i < params.length; i++) {
         data.append("params[]", params[i]);
     }
     $.ajax({
@@ -266,6 +326,7 @@ function  submitTask() {
         }
     });
 }
+
 //预加载
 $(function () {
     let sidebars = $(".sidebar");
@@ -285,6 +346,10 @@ $("#imageTableLink").on("click", function () {
 $("#taskTableLink").on("click", function () {
     getImages4Task();
 });
+// 侧边 - 结果列表
+$("#resultTableLink").on("click", function () {
+    getImages4Result();
+});
 //镜像详细信息 - ok
 $("#okImageDetail").on("click", function () {
     closeCard($("#imageDetailCard"));
@@ -301,7 +366,7 @@ $("#selectImage").on("click", function () {
     openCard($("#selectImageCard"));
 });
 // 任务创建 - 选择标签
-$("#selectTag").on("click", function () {
+$("#i").on("click", function () {
     getTags4Select($("#selectImage").html());
     openCard($("#selectTagCard"));
 });
@@ -316,6 +381,10 @@ $("#cancelSelectTag").on("click", function () {
 //子任务展示 - 取消
 $("#cancelSubTask").on("click", function () {
     closeCard($("#subTaskCard"));
+});
+// 结果详情 - 取消
+$("#cancelSubResult").on("click", function () {
+    closeCard($("#subResultCard"));
 });
 $("#submitTask").on("click", function () {
     submitTask();
