@@ -366,7 +366,7 @@ $("#selectImage").on("click", function () {
     openCard($("#selectImageCard"));
 });
 // 任务创建 - 选择标签
-$("#i").on("click", function () {
+$("#selectTag").on("click", function () {
     getTags4Select($("#selectImage").html());
     openCard($("#selectTagCard"));
 });
