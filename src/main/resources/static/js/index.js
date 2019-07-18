@@ -175,44 +175,49 @@ var pagesize = 10;   /*每页条数*/
 var currentPage;
 var startRow;
 var lastRow;
-function pagination(i){
+
+function pagination(i) {
     departmentInfo = document.getElementById("taskTableBody");  /*获取table中的内容*/
     totalRow = departmentInfo.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
-    totalPage = Math.ceil(totalRow/pagesize);
+    totalPage = Math.ceil(totalRow / pagesize);
     currentPage = i;/*当前页*/
-    document.getElementById("numPage").value="第"+currentPage+"页";   /*显示页码*/
-    startRow = (currentPage-1)*pagesize;/*每页显示第一条数据的行数*/
-    lastRow = currentPage*pagesize;/*每页显示的最后一条数据的行数,因为表头也算一行，所以这里不需要减1，这种情况以自己的实际情况为准*/
-    if(lastRow>totalRow){
-        lastRow=totalRow;/*如果最后一页的最后一条数据显示的行数大于总条数，那么就让最后一条的行数等于总条数*/
+    document.getElementById("numPage").value = "第" + currentPage + "页";   /*显示页码*/
+    startRow = (currentPage - 1) * pagesize;/*每页显示第一条数据的行数*/
+    lastRow = currentPage * pagesize;/*每页显示的最后一条数据的行数,因为表头也算一行，所以这里不需要减1，这种情况以自己的实际情况为准*/
+    if (lastRow > totalRow) {
+        lastRow = totalRow;/*如果最后一页的最后一条数据显示的行数大于总条数，那么就让最后一条的行数等于总条数*/
     }
-    for(var i = 0;i<totalRow;i++){   /*将数据遍历出来*/
+    for (var i = 0; i < totalRow; i++) {   /*将数据遍历出来*/
         var hrow = departmentInfo.rows[i];
-        if(i>=startRow&&i<lastRow){
-            hrow.style.display="table-row";
-        }else{
-            hrow.style.display="none";
+        if (i >= startRow && i < lastRow) {
+            hrow.style.display = "table-row";
+        } else {
+            hrow.style.display = "none";
         }
     }
 }
-function firstPage(){
+
+function firstPage() {
     var i = 1;
     pagination(i);
 }
-function prevPage(){
-    var i= currentPage-1;
-    if(i<1){
-        i=currentPage;
+
+function prevPage() {
+    var i = currentPage - 1;
+    if (i < 1) {
+        i = currentPage;
     }
     pagination(i);
 }
-function pnextPage(){
-    var i= currentPage+1;
-    if(i>totalPage){
-        i= currentPage;
+
+function pnextPage() {
+    var i = currentPage + 1;
+    if (i > totalPage) {
+        i = currentPage;
     }
     pagination(i);
 }
+
 function lastPage() {
     var i = totalPage;
     pagination(i);
@@ -222,48 +227,54 @@ var pagesize2 = 10;   /*每页条数*/
 var currentPage2;
 var startRow2;
 var lastRow2;
-function pagination2(i){
+
+function pagination2(i) {
     departmentInfo2 = document.getElementById("subTaskTableBody");  /*获取table中的内容*/
     totalRow2 = departmentInfo2.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
-    totalPage2 = Math.ceil(totalRow2/pagesize2);
+    totalPage2 = Math.ceil(totalRow2 / pagesize2);
     currentPage2 = i;/*当前页*/
-    document.getElementById("numPage2").value="第"+currentPage2+"页";   /*显示页码*/
-    startRow2 = (currentPage2-1)*pagesize2;/*每页显示第一条数据的行数*/
-    lastRow2 = currentPage2*pagesize2;/*每页显示的最后一条数据的行数,因为表头也算一行，所以这里不需要减1，这种情况以自己的实际情况为准*/
-    if(lastRow2>totalRow2){
-        lastRow2=totalRow2;/*如果最后一页的最后一条数据显示的行数大于总条数，那么就让最后一条的行数等于总条数*/
+    document.getElementById("numPage2").value = "第" + currentPage2 + "页";   /*显示页码*/
+    startRow2 = (currentPage2 - 1) * pagesize2;/*每页显示第一条数据的行数*/
+    lastRow2 = currentPage2 * pagesize2;/*每页显示的最后一条数据的行数,因为表头也算一行，所以这里不需要减1，这种情况以自己的实际情况为准*/
+    if (lastRow2 > totalRow2) {
+        lastRow2 = totalRow2;/*如果最后一页的最后一条数据显示的行数大于总条数，那么就让最后一条的行数等于总条数*/
     }
-    for(var i = 0;i<totalRow2;i++){   /*将数据遍历出来*/
+    for (var i = 0; i < totalRow2; i++) {   /*将数据遍历出来*/
         var hrow = departmentInfo2.rows[i];
-        if(i>=startRow2&&i<lastRow2){
-            hrow.style.display="table-row";
-        }else{
-            hrow.style.display="none";
+        if (i >= startRow2 && i < lastRow2) {
+            hrow.style.display = "table-row";
+        } else {
+            hrow.style.display = "none";
         }
     }
 }
-function firstPage2(){
+
+function firstPage2() {
     var i = 1;
     pagination2(i);
 }
-function prevPage2(){
-    var i= currentPage2-1;
-    if(i<1){
-        i=currentPage2;
+
+function prevPage2() {
+    var i = currentPage2 - 1;
+    if (i < 1) {
+        i = currentPage2;
     }
     pagination2(i);
 }
-function pnextPage2(){
-    var i= currentPage2+1;
-    if(i>totalPage2){
-        i= currentPage2;
+
+function pnextPage2() {
+    var i = currentPage2 + 1;
+    if (i > totalPage2) {
+        i = currentPage2;
     }
     pagination2(i);
 }
+
 function lastPage2() {
     var i = totalPage2;
     pagination2(i);
 }
+
 //分页结束
 function getImages4Task() {
     let $imageBody = $("#image4TaskTableBody");
@@ -405,6 +416,79 @@ function submitTask() {
     });
 }
 
+// 统计图载入
+function setCharts() {
+    var ctx = $("#portChart")[0];
+    var colorSet = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+    ];
+    var portChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["80", "443", "22", "53", "8080"],
+            datasets: [{
+                label: "开放数",
+                data: [1054, 732, 261, 99, 8],
+                backgroundColor: colorSet,
+                borderColor: colorSet,
+                borderWidth: 1,
+            }]
+        },
+        option: {
+            responsive: false,
+        }
+    });
+    var serviceChart = new Chart($("#serviceChart"), {
+        type: "bar",
+        data: {
+            labels: ["http", "https", "ssh", "dns", "smtp"],
+            datasets: [{
+                label: "开放数",
+                data: [1102, 732, 261, 99, 2],
+                backgroundColor: colorSet,
+                borderColor: colorSet,
+                borderWidth: 1,
+            }]
+        },
+        option: {
+            responsive: false,
+        }
+    });
+    var hardwareChart = new Chart($("#hardwareChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["general purpose", "router", "WAP", "hub", "others"],
+            datasets: [{
+                data: [1825, 447, 142, 85, 203],
+                backgroundColor: colorSet,
+                borderColor: colorSet,
+                borderWidth: 1,
+            }]
+        },
+        option: {
+            responsive: false,
+        }
+    });
+    var hardwareChart = new Chart($("#osChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["Linux", "Windows", "others"],
+            datasets: [{
+                data: [2133, 981, 362],
+                backgroundColor: colorSet,
+                borderColor: colorSet,
+                borderWidth: 1,
+            }]
+        },
+        option: {
+            responsive: false,
+        }
+    });
+}
 //预加载
 $(function () {
     let sidebars = $(".sidebar");
@@ -469,3 +553,4 @@ $("#submitTask").on("click", function () {
 });
 //首次加载
 getImages();
+setCharts();

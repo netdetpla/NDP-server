@@ -45,4 +45,8 @@
     float: left;
     margin-left: 10px;cursor: pointer;
 }
+#statisticTable {
+    overflow: scroll;
+    height: 100%;
+}
 

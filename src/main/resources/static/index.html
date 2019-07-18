@@ -25,6 +25,10 @@
             <a href="#resultTable" class="collection-item blue darken-1 active" id="resultTableLink">结果列表</a>
             <a href="#taskCreate" class="collection-item blue darken-1 active">新建任务</a>
         </div>
+        <div class="side-type-text">统计分析</div>
+        <div class="collection blue darken-1 sidebar" style="border: 0;">
+            <a href="#statisticTable" class="collection-item blue darken-1 active" id="statisticTableLink">统计图表</a>
+        </div>
     </div>
     <!--镜像表格-->
     <div class="col s10 full-height " id="imageTable">
@@ -135,7 +139,7 @@
                     <a id="prePage" onclick="prevPage()">上一页</a>
                     <a id="nexPage" onclick="pnextPage()">下一页</a>
                     <a id="lasPage" onclick="lastPage()" style="width: 35px;">尾页</a>
-                    <input id="numPage" style="width: 40px;margin-left: 10px;height: 16px;" />
+                    <input id="numPage" style="width: 40px;margin-left: 10px;height: 16px;"/>
                 </div>
             </div>
         </div>
@@ -201,6 +205,39 @@
                 </button>
             </div>
             <div class="col s4"></div>
+        </div>
+    </div>
+    <!--统计图表-->
+    <div class="col s10 hide" id="statisticTable">
+        <h5>统计图表</h5>
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s10">
+                <div class="row">
+                    <h6>开放端口统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="portChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>开放服务统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>硬件类型统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="hardwareChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>操作系统统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="osChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -280,7 +317,7 @@
             <a id="prePage2" onclick="prevPage2()">上一页</a>
             <a id="nexPage2" onclick="pnextPage2()">下一页</a>
             <a id="lasPage2" onclick="lastPage2()" style="width: 35px;">尾页</a>
-            <input id="numPage2" style="width: 40px;margin-left: 10px;height: 16px;" />
+            <input id="numPage2" style="width: 40px;margin-left: 10px;height: 16px;"/>
         </div>
         <div class="card-action center">
             <a id="cancelSubTask" class="waves-effect waves-light btn blue darken-1">确定</a>
@@ -338,6 +375,7 @@
 </div>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/materialize.js"></script>
+<script src="js/Chart.bundle.js"></script>
 <script src="js/index.js"></script>
 </body>
 </html>
