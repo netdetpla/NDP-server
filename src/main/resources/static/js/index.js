@@ -1,4 +1,5 @@
 // 侧边栏切换监听
+
 function handleClickSideItem() {
     $(this).removeClass("blue darken-1 active");
     let href = $(this).attr("href");
@@ -177,9 +178,9 @@ var startRow;
 var lastRow;
 
 function pagination(i) {
-    departmentInfo = document.getElementById("taskTableBody");  /*获取table中的内容*/
-    totalRow = departmentInfo.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
-    totalPage = Math.ceil(totalRow / pagesize);
+    let departmentInfo = document.getElementById("taskTableBody");  /*获取table中的内容*/
+    let totalRow = departmentInfo.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
+    var totalPage = Math.ceil(totalRow / pagesize);
     currentPage = i;/*当前页*/
     document.getElementById("numPage").value = "第" + currentPage + "页";   /*显示页码*/
     startRow = (currentPage - 1) * pagesize;/*每页显示第一条数据的行数*/
@@ -229,9 +230,9 @@ var startRow2;
 var lastRow2;
 
 function pagination2(i) {
-    departmentInfo2 = document.getElementById("subTaskTableBody");  /*获取table中的内容*/
-    totalRow2 = departmentInfo2.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
-    totalPage2 = Math.ceil(totalRow2 / pagesize2);
+    let departmentInfo2 = document.getElementById("subTaskTableBody");  /*获取table中的内容*/
+    let totalRow2 = departmentInfo2.rows.length;   /*计算出总条数(这种方法用来获取table行数，获取列数用var cells = departmentsInfo.rows[0].cells.length;*/
+    let totalPage2 = Math.ceil(totalRow2 / pagesize2);
     currentPage2 = i;/*当前页*/
     document.getElementById("numPage2").value = "第" + currentPage2 + "页";   /*显示页码*/
     startRow2 = (currentPage2 - 1) * pagesize2;/*每页显示第一条数据的行数*/
@@ -331,7 +332,7 @@ function getImages4Select() {
             $row.on("click", function () {
                 $("#selectImage").html($(this).find("td:first").html());
                 //修改了参数显示的UI
-                imageName = $("#selectImage").html();
+                let imageName = $("#selectImage").html();
                 paramChange(imageParam[imageName]);
                 $("#selectTag").removeClass("disabled").html("选择标签");
                 closeCard($("#selectImageCard"));
@@ -426,69 +427,85 @@ function setCharts() {
         'rgba(75, 192, 192, 1)',
         'rgba(153, 102, 255, 1)',
     ];
-    var portChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: ["80", "443", "22", "53", "8080"],
-            datasets: [{
-                label: "开放数",
-                data: [1054, 732, 261, 99, 8],
-                backgroundColor: colorSet,
-                borderColor: colorSet,
-                borderWidth: 1,
-            }]
-        },
-        option: {
-            responsive: false,
-        }
-    });
-    var serviceChart = new Chart($("#serviceChart"), {
-        type: "bar",
-        data: {
-            labels: ["http", "https", "ssh", "dns", "smtp"],
-            datasets: [{
-                label: "开放数",
-                data: [1102, 732, 261, 99, 2],
-                backgroundColor: colorSet,
-                borderColor: colorSet,
-                borderWidth: 1,
-            }]
-        },
-        option: {
-            responsive: false,
-        }
-    });
-    var hardwareChart = new Chart($("#hardwareChart"), {
-        type: "doughnut",
-        data: {
-            labels: ["general purpose", "router", "WAP", "hub", "others"],
-            datasets: [{
-                data: [1825, 447, 142, 85, 203],
-                backgroundColor: colorSet,
-                borderColor: colorSet,
-                borderWidth: 1,
-            }]
-        },
-        option: {
-            responsive: false,
-        }
-    });
-    var hardwareChart = new Chart($("#osChart"), {
-        type: "doughnut",
-        data: {
-            labels: ["Linux", "Windows", "others"],
-            datasets: [{
-                data: [2133, 981, 362],
-                backgroundColor: colorSet,
-                borderColor: colorSet,
-                borderWidth: 1,
-            }]
-        },
-        option: {
-            responsive: false,
-        }
+    let portLabels, portData;
+    let serviceLabels, serviceData;
+    let hardwareLabels, hardwareData;
+    let osLabels, osData;
+    $.get("/statistic/charts", {}, function (json) {
+        let data = json.data;
+        portLabels = data["port"]["labels"];
+        portData = data["port"]["data"];
+        serviceLabels = data["service"]["labels"];
+        serviceData = data["service"]["data"];
+        hardwareLabels = data["hardware"]["labels"];
+        hardwareData = data["hardware"]["data"];
+        osLabels = data["os"]["labels"];
+        osData = data["os"]["data"];
+        var portChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: portLabels,
+                datasets: [{
+                    label: "开放数",
+                    data: portData,
+                    backgroundColor: colorSet,
+                    borderColor: colorSet,
+                    borderWidth: 1,
+                }]
+            },
+            option: {
+                responsive: false,
+            }
+        });
+        var serviceChart = new Chart($("#serviceChart"), {
+            type: "bar",
+            data: {
+                labels: serviceLabels,
+                datasets: [{
+                    label: "开放数",
+                    data: serviceData,
+                    backgroundColor: colorSet,
+                    borderColor: colorSet,
+                    borderWidth: 1,
+                }]
+            },
+            option: {
+                responsive: false,
+            }
+        });
+        var hardwareChart = new Chart($("#hardwareChart"), {
+            type: "doughnut",
+            data: {
+                labels: hardwareLabels,
+                datasets: [{
+                    data: hardwareData,
+                    backgroundColor: colorSet,
+                    borderColor: colorSet,
+                    borderWidth: 1,
+                }]
+            },
+            option: {
+                responsive: false,
+            }
+        });
+        var hardwareChart = new Chart($("#osChart"), {
+            type: "doughnut",
+            data: {
+                labels: osLabels,
+                datasets: [{
+                    data: osData,
+                    backgroundColor: colorSet,
+                    borderColor: colorSet,
+                    borderWidth: 1,
+                }]
+            },
+            option: {
+                responsive: false,
+            }
+        });
     });
 }
+
 //预加载
 $(function () {
     let sidebars = $(".sidebar");
