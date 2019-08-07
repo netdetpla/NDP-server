@@ -421,6 +421,16 @@ function submitTask() {
 function setCharts() {
     var ctx = $("#portChart")[0];
     var colorSet = [
+        'rgba(255, 79, 129, 1)',
+        'rgba(255, 108, 95, 1)',
+        'rgba(255, 193, 104, 1)',
+        'rgba(45, 222, 152, 1)',
+        'rgba(28, 199, 208, 1)',
+        'rgba(0, 174, 255, 1)',
+        'rgba(51, 105, 231, 1)',
+        'rgba(142, 67, 231, 1)',
+    ];
+    var colorSet2 = [
         'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
@@ -479,8 +489,8 @@ function setCharts() {
                 labels: hardwareLabels,
                 datasets: [{
                     data: hardwareData,
-                    backgroundColor: colorSet,
-                    borderColor: colorSet,
+                    backgroundColor: colorSet2,
+                    borderColor: colorSet2,
                     borderWidth: 1,
                 }]
             },
@@ -494,8 +504,8 @@ function setCharts() {
                 labels: osLabels,
                 datasets: [{
                     data: osData,
-                    backgroundColor: colorSet,
-                    borderColor: colorSet,
+                    backgroundColor: colorSet2,
+                    borderColor: colorSet2,
                     borderWidth: 1,
                 }]
             },
