@@ -17,13 +17,13 @@ public class DatabaseHandler {
             connection = DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(((java.sql.SQLException)e).getErrorCode());
+//            System.out.println(((java.sql.SQLException)e).getErrorCode());
             System.exit(-1);
         }
     }
 
-    public static Connection getConnection() {
-        if (connection != null) {
+    public static Connection getConnection() throws SQLException {
+        if (connection != null && connection.isValid(5)) {
             return connection;
         }
         try {

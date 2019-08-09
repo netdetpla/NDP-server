@@ -516,6 +516,61 @@ function setCharts() {
     });
 }
 
+// 搜索
+function searchChart() {
+    let charts = [];
+    let type = $("input[name=searchGroup]:checked").val();
+    $.post("/statistic/search", {
+        "type": type,
+        "keyword": $("#keyword").val()
+    }, function (json) {
+        let data = json.data;
+        let $searchCharts = $("#searchCharts");
+        $searchCharts.empty();
+        let chartID = "searchChartID-";
+        let colorSet = [
+            'rgba(255, 79, 129, 1)',
+            'rgba(255, 108, 95, 1)',
+            'rgba(255, 193, 104, 1)',
+            'rgba(45, 222, 152, 1)',
+            'rgba(28, 199, 208, 1)',
+            'rgba(0, 174, 255, 1)',
+            'rgba(51, 105, 231, 1)',
+            'rgba(142, 67, 231, 1)',
+        ];
+        for (let i = 0; i < data.length; i++) {
+            $searchCharts.append("<div class=\"row\">" +
+                "<div style=\"width: 600px; height: 400px;\">" +
+                "<canvas id=\"" + chartID + i +
+                "\"></canvas>" +
+                "</div>" +
+                "</div>");
+            let $searchChart = $("#" + chartID + i);
+            charts.push(new Chart($searchChart, {
+                type: data[i].type,
+                data: {
+                    labels: data[i].labels,
+                    datasets: [{
+                        label: "数量",
+                        data: data[i].data,
+                        backgroundColor: colorSet,
+                        borderColor: colorSet,
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: data[i].title
+                    }
+                }
+            }));
+        }
+    });
+}
+
 //预加载
 $(function () {
     let sidebars = $(".sidebar");
@@ -577,6 +632,9 @@ $("#cancelSubResult").on("click", function () {
 });
 $("#submitTask").on("click", function () {
     submitTask();
+});
+$("#submitSearch").on("click", function () {
+    searchChart();
 });
 //首次加载
 getImages();

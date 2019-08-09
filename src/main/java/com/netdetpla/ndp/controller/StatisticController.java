@@ -2,11 +2,11 @@ package com.netdetpla.ndp.controller;
 
 import com.netdetpla.ndp.bean.Charts;
 import com.netdetpla.ndp.bean.ResponseEnvelope;
+import com.netdetpla.ndp.bean.SearchChart;
 import com.netdetpla.ndp.handler.DatabaseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -89,4 +89,43 @@ public class StatisticController {
                 data
         ), HttpStatus.OK);
     }
+
+    // 搜索统计数据
+    @PostMapping("/statistic/search")
+    public ResponseEntity<?> getSearchCharts(
+            @RequestParam("type") String type,
+            @RequestParam("keyword") String keyword
+    ) throws SQLException {
+        SearchChart[] data = new SearchChart[4];
+        data[0] = new SearchChart(
+                "端口",
+                "bar",
+                new String[] {"80", "443", "53", "21"},
+                new int[] {1022, 609, 331, 112}
+        );
+        data[1] = new SearchChart(
+                "服务",
+                "bar",
+                new String[] {"http", "dns", "snmp", "ssh"},
+                new int[] {1022, 609, 331, 112}
+        );
+        data[2] = new SearchChart(
+                "操作系统",
+                "doughnut",
+                new String[] {"Linux", "Windows", "other"},
+                new int[] {1022, 609, 331}
+        );
+        data[3] = new SearchChart(
+                "硬件",
+                "doughnut",
+                new String[] {"WAP", "router", "PC", "other"},
+                new int[] {1022, 609, 331, 112}
+        );
+        return new ResponseEntity<>(new ResponseEnvelope<>(
+                HttpStatus.OK.value(),
+                "OK",
+                data
+        ), HttpStatus.OK);
+    }
+
 }

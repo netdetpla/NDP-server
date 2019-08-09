@@ -2,7 +2,7 @@
     padding: 10px;
 }
 
-#imageTable, #taskTable {
+#imageTable, #taskTable, #resultTable, #searchTable {
     padding-left: 0;
 }
 
@@ -38,14 +38,14 @@
     overflow: auto;
 }
 
-#pagination #pagination2{
+#pagination, #pagination2{
 
     width: 500px;
     height:100px;
     float: left;
     margin-left: 10px;cursor: pointer;
 }
-#statisticTable {
+#statisticTable, #searchTable {
     overflow: scroll;
     height: 100%;
 }
