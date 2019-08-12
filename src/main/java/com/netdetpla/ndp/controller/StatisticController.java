@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 @RestController
 public class StatisticController {
@@ -96,36 +100,154 @@ public class StatisticController {
             @RequestParam("type") String type,
             @RequestParam("keyword") String keyword
     ) throws SQLException {
-        SearchChart[] data = new SearchChart[4];
-        data[0] = new SearchChart(
-                "端口",
-                "bar",
-                new String[] {"80", "443", "53", "21"},
-                new int[] {1022, 609, 331, 112}
+        switch (type) {
+            case "port":
+                return searchPortChart(keyword);
+            case "service":
+                return searchServiceChart(keyword);
+            default:
+                return new ResponseEntity<>(new ResponseEnvelope<>(
+                        HttpStatus.OK.value(),
+                        "OK",
+                        new int[0]
+                ), HttpStatus.OK);
+        }
+    }
+
+    private SearchChart search(
+            String sql,
+            String title,
+            String type,
+            String keyword,
+            int total
+    ) throws SQLException {
+        ResultSet resultSet = DatabaseHandler.executeQuery(sql, keyword);
+        List<String> labels = new ArrayList<>();
+        List<Integer> data = new ArrayList<>();
+        int other = total;
+        while (resultSet.next()) {
+            labels.add(resultSet.getString(1));
+            data.add(resultSet.getInt(2));
+            other -= data.get(data.size() - 1);
+        }
+        if (other > 0) {
+            labels.add("other");
+            data.add(other);
+        }
+        return new SearchChart(
+                title,
+                type,
+                labels.toArray(new String[0]),
+                data.stream().mapToInt(i -> i).toArray()
         );
-        data[1] = new SearchChart(
+    }
+
+    private ResponseEntity<?> searchPortChart(String keyword) throws SQLException {
+        ResultSet resultSet = DatabaseHandler.executeQuery(
+                "select count(*) from `port` where `port` = ?",
+                keyword
+        );
+        resultSet.next();
+        int total = resultSet.getInt(1);
+        List<SearchChart> data = new ArrayList<>();
+        // protocol
+        data.add(search(
+                "select `protocol`, count(*) as c from `port` where `port` = ? group by `protocol` order by c desc limit 7",
+                "运输层协议",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // service
+        data.add(search(
+                "select `service`, count(*) as c from `port` where `port` = ? group by `service` order by c desc limit 7",
                 "服务",
-                "bar",
-                new String[] {"http", "dns", "snmp", "ssh"},
-                new int[] {1022, 609, 331, 112}
-        );
-        data[2] = new SearchChart(
+                "doughnut",
+                keyword,
+                total
+        ));
+        // product
+        data.add(search(
+                "select `product`, count(*) as c from `port` where `port` = ? group by `product` order by c desc limit 7",
+                "软件",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // os
+        data.add(search(
+                "select `os_version`, count(*) as c from `ip` where `id` in (select `ip_id` from `port` where `port` = ?) group by `os_version` order by c desc limit 7",
                 "操作系统",
                 "doughnut",
-                new String[] {"Linux", "Windows", "other"},
-                new int[] {1022, 609, 331}
-        );
-        data[3] = new SearchChart(
-                "硬件",
+                keyword,
+                total
+        ));
+        // hardware
+        data.add(search(
+                "select `hardware`, count(*) as c from `ip` where `id` in (select `ip_id` from `port` where `port` = ?) group by `hardware` order by c desc limit 7",
+                "设备类型",
                 "doughnut",
-                new String[] {"WAP", "router", "PC", "other"},
-                new int[] {1022, 609, 331, 112}
-        );
+                keyword,
+                total
+        ));
         return new ResponseEntity<>(new ResponseEnvelope<>(
                 HttpStatus.OK.value(),
                 "OK",
                 data
         ), HttpStatus.OK);
     }
-
+    private ResponseEntity<?> searchServiceChart(String keyword) throws SQLException {
+        ResultSet resultSet = DatabaseHandler.executeQuery(
+                "select count(*) from `port` where `port` = ?",
+                keyword
+        );
+        resultSet.next();
+        int total = resultSet.getInt(1);
+        List<SearchChart> data = new ArrayList<>();
+        // protocol
+        data.add(search(
+                "select `protocol`, count(*) as c from `port` where `service` = ? group by `protocol` order by c desc limit 7",
+                "运输层协议",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // port
+        data.add(search(
+                "select `port`, count(*) as c from `port` where `service` = ? group by `port` order by c desc limit 7",
+                "端口",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // product
+        data.add(search(
+                "select `product`, count(*) as c from `port` where `service` = ? group by `product` order by c desc limit 7",
+                "软件",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // os
+        data.add(search(
+                "select `os_version`, count(*) as c from `ip` where `id` in (select `ip_id` from `port` where `service` = ?) group by `os_version` order by c desc limit 7",
+                "操作系统",
+                "doughnut",
+                keyword,
+                total
+        ));
+        // hardware
+        data.add(search(
+                "select `hardware`, count(*) as c from `ip` where `id` in (select `ip_id` from `port` where `service` = ?) group by `hardware` order by c desc limit 7",
+                "设备类型",
+                "doughnut",
+                keyword,
+                total
+        ));
+        return new ResponseEntity<>(new ResponseEnvelope<>(
+                HttpStatus.OK.value(),
+                "OK",
+                data
+        ), HttpStatus.OK);
+    }
 }

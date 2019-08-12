@@ -58,7 +58,7 @@ public class DatabaseHandler {
     }
 
     private static PreparedStatement generateQuery(String sql, String[] args) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
         for (int i = 0; i < args.length; i++) {
             preparedStatement.setString(i + 1, args[i]);
         }

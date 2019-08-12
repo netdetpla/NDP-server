@@ -519,7 +519,8 @@ function setCharts() {
 // 搜索
 function searchChart() {
     let charts = [];
-    let type = $("input[name=searchGroup]:checked").val();
+    let radioID = $("input[name=searchGroup]:checked").attr("id");
+    let type = $("label[for=" + radioID + "]").text();
     $.post("/statistic/search", {
         "type": type,
         "keyword": $("#keyword").val()
