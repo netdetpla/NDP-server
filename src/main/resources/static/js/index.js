@@ -572,6 +572,50 @@ function searchChart() {
     });
 }
 
+function mapInit() {
+    var map = new AMap.Map('mapContainer', {
+        mapStyle: 'amap://styles/grey',
+        zoom: 5,
+        center: [107.4976, 36.1697],
+        viewMode: '3D'
+    });
+
+    var layer = new Loca.RoundPointLayer({
+        fitView: true,
+        map: map,
+    });
+
+    let data = [
+        {"lnglat": [116.405285, 39.904989], "name": "北京市", "style": 1},
+        {"lnglat": [117.190182, 39.125596], "name": "天津市", "style": 2}
+    ];
+    layer.setData(data, {
+        lnglat: function (data) {
+            return data.value.lnglat;
+        }
+    });
+    layer.setOptions({
+        style: {
+            radius: 10,
+            color: function (data) {
+                switch (data.value.style) {
+                    case 1:
+                        return "#08519c";
+                    case 2:
+                        return "#6baed6";
+                    default:
+                        return "#c6dbef";
+                }
+            },
+            opacity: 0.6,
+            borderWidth: 0,
+            borderColor: '#eee'
+        }
+    });
+
+    layer.render();
+}
+
 //预加载
 $(function () {
     let sidebars = $(".sidebar");
@@ -640,3 +684,4 @@ $("#submitSearch").on("click", function () {
 //首次加载
 getImages();
 setCharts();
+mapInit();

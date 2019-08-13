@@ -28,6 +28,7 @@
         <div class="side-type-text">统计分析</div>
         <div class="collection blue darken-1 sidebar" style="border: 0;">
             <a href="#statisticTable" class="collection-item blue darken-1 active" id="statisticTableLink">统计图表</a>
+            <a href="#statisticMap" class="collection-item blue darken-1 active" id="statisticMapLink">IP散点图</a>
             <a href="#searchTable" class="collection-item blue darken-1 active" id="searchTableLink">搜索统计</a>
         </div>
     </div>
@@ -241,6 +242,10 @@
             </div>
         </div>
     </div>
+    <!--IP散点图-->
+    <div class="col s10 hide" id="statisticMap">
+        <div id="mapContainer"></div>
+    </div>
     <!--搜索统计-->
     <div class="col s10 hide full-height" id="searchTable">
         <div class="row form-fix">
@@ -250,8 +255,8 @@
                 <label for="searchPort">port</label>
                 <input name="searchGroup" type="radio" id="searchService"/>
                 <label for="searchService">service</label>
-<!--                <input name="searchGroup" type="radio" id="searchIPSegment"/>-->
-<!--                <label for="searchIPSegment">ip segment</label>-->
+                <!--                <input name="searchGroup" type="radio" id="searchIPSegment"/>-->
+                <!--                <label for="searchIPSegment">ip segment</label>-->
                 <div class="input-field">
                     <input id="keyword" type="text" class="validate">
                     <label for="keyword">内容</label>
@@ -405,6 +410,8 @@
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/Chart.bundle.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=e153ac2e0ec83b1c67f56bf86e236f5a"></script>
+<script src="https://webapi.amap.com/loca?v=1.3.0&key=e153ac2e0ec83b1c67f56bf86e236f5a"></script>
 <script src="js/index.js"></script>
 </body>
 </html>

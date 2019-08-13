@@ -6,7 +6,7 @@
     padding-left: 0;
 }
 
-#imageDetailCard, #selectImageCard, #selectTagCard{
+#imageDetailCard, #selectImageCard, #selectTagCard {
     display: none;
     position: absolute;
     width: 600px;
@@ -16,7 +16,7 @@
     z-index: 3;
 }
 
-#subTaskCard, #subResultCard{
+#subTaskCard, #subResultCard {
     display: none;
     position: absolute;
     width: 1000px;
@@ -38,15 +38,27 @@
     overflow: auto;
 }
 
-#pagination, #pagination2{
+#pagination, #pagination2 {
 
     width: 500px;
-    height:100px;
+    height: 100px;
     float: left;
-    margin-left: 10px;cursor: pointer;
+    margin-left: 10px;
+    cursor: pointer;
 }
+
 #statisticTable, #searchTable {
     overflow: scroll;
     height: 100%;
 }
 
+#statisticMap {
+    height: 100%;
+    padding: 0;
+}
+#mapContainer {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
