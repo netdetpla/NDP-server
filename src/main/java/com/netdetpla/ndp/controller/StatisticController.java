@@ -1,6 +1,7 @@
 package com.netdetpla.ndp.controller;
 
 import com.netdetpla.ndp.bean.Charts;
+import com.netdetpla.ndp.bean.LngLat;
 import com.netdetpla.ndp.bean.ResponseEnvelope;
 import com.netdetpla.ndp.bean.SearchChart;
 import com.netdetpla.ndp.handler.DatabaseHandler;
@@ -112,6 +113,28 @@ public class StatisticController {
                         new int[0]
                 ), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/statistic/map")
+    public ResponseEntity<?> getMapLngLat() throws SQLException {
+        List<LngLat> data = new ArrayList<>();
+        data.add(new LngLat(new double[]{116.405285,39.904989}, 2));
+        data.add(new LngLat(new double[]{117.190182,39.125596}, 2));
+        data.add(new LngLat(new double[]{108.948024, 34.263161}, 1));
+        data.add(new LngLat(new double[]{104.065735, 30.659462}, 2));
+        data.add(new LngLat(new double[]{106.504962, 29.533155}, 2));
+        data.add(new LngLat(new double[]{113.280637, 23.125178}, 2));
+        data.add(new LngLat(new double[]{112.549248, 37.857014}, 1));
+        data.add(new LngLat(new double[]{125.3245, 43.886841}, 0));
+        data.add(new LngLat(new double[]{114.298572, 30.584355}, 1));
+        data.add(new LngLat(new double[]{17.283042, 31.861191}, 1));
+        data.add(new LngLat(new double[]{111.670801, 40.818311}, 0));
+        data.add(new LngLat(new double[]{114.173355, 22.320048}, 2));
+        return new ResponseEntity<>(new ResponseEnvelope<>(
+                HttpStatus.OK.value(),
+                "OK",
+                data
+        ), HttpStatus.OK);
     }
 
     private SearchChart search(
