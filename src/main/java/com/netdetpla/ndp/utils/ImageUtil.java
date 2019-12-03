@@ -207,8 +207,8 @@ public class ImageUtil {
         String[] re_server = params[1].split("\\+");
         String[] re_servers = urlSplit(re_server, 100, "+");
 
-        for(int i=0; i < domains.length; i++){
-            for(int j=0; j < re_servers.length; j++) {
+        for (int i = 0; i < domains.length; i++) {
+            for (int j = 0; j < re_servers.length; j++) {
                 String paramString = id + "," + domains[i] + "," + re_servers[j] + "," + taskName + "," + id;
                 id++;
                 String paramBase64 = null;
@@ -226,6 +226,27 @@ public class ImageUtil {
                         priority
                 );
             }
+        }
+    }
+
+    public static void ipTest(
+            int id,
+            String tidString,
+            int image_id,
+            String taskName,
+            String priority,
+            String[] params
+    ) {
+        String[] ips = ipSplit(params[0].split(","), 24);
+        for (String ip : ips) {
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    ip,
+                    priority
+            );
         }
     }
 }

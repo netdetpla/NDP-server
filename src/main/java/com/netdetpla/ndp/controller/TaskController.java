@@ -70,6 +70,8 @@ public class TaskController {
                 scanvul(id, tidString, image_id, taskName, priority, params);
             case "dnssecure":
                 dnssecure(id, tidString, image_id, taskName, priority, params);
+            case "ip-test":
+                ipTest(id, tidString, image_id, taskName, priority, params);
             default:
                 break;
         }
