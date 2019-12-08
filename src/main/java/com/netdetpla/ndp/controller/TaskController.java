@@ -64,14 +64,22 @@ public class TaskController {
                 break;
             case "info_shell":
                 info_shell(id,tidString,image_id,taskName,priority,params);
+                break;
             case "scandns":
                 scandns(id, tidString, image_id, taskName, priority, params);
+                break;
             case "scanvul":
                 scanvul(id, tidString, image_id, taskName, priority, params);
+                break;
             case "dnssecure":
                 dnssecure(id, tidString, image_id, taskName, priority, params);
+                break;
             case "ip-test":
                 ipTest(id, tidString, image_id, taskName, priority, params);
+                break;
+            case "port-scan":
+                portScan(id, tidString, image_id, taskName, priority, params);
+                break;
             default:
                 break;
         }
