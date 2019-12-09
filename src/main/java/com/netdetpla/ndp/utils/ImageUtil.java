@@ -249,4 +249,31 @@ public class ImageUtil {
             );
         }
     }
+
+    public static void portScan(
+            int id,
+            String tidString,
+            int image_id,
+            String taskName,
+            String priority,
+            String[] params
+    ) {
+        String[] ips = ipSplit(params[0].split(","), 24);
+        String[] ports = urlSplit(portSplit(params[1].split(",")), 100, ",");
+
+        for (String ip : ips) {
+            for (String port : ports) {
+                String paramString = ip + ";" + port;
+                // TODO 处理任务添加失败
+                DatabaseHandler.execute(
+                        "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                        tidString,
+                        taskName,
+                        Integer.toString(image_id),
+                        paramString,
+                        priority
+                );
+            }
+        }
+    }
 }
