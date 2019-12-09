@@ -95,13 +95,14 @@ public class ImageController {
     public ResponseEntity<?> getTags(@PathVariable(value = "image_name") String imageName) throws SQLException {
         List<Image> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select tag, upload_time from image where image_name = ?",
+                "select tag, upload_time, `size` from image where image_name = ?",
                 imageName
         );
         while (resultSet.next()) {
             data.add(new Image(
                     resultSet.getString(1),
-                    resultSet.getString(2)
+                    resultSet.getString(2),
+                    resultSet.getString(3)
             ));
         }
         return new ResponseEntity<>(new ResponseEnvelope<>(

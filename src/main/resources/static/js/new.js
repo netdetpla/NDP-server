@@ -42,7 +42,7 @@ function getImages() {
                 let image = $(this).html();
                 $selectImageBtn.html(image);
                 $selectTag.on("click", function () {
-                    getTags(image);
+                    getTags($selectImageBtn.html());
                 });
                 $selectTag.removeProp("disabled");
             });

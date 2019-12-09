@@ -27,6 +27,7 @@ function getTags(imageName) {
             $row.append("<td>" + imageName + "</td>");
             $row.append("<td>" + data[i].tag + "</td>");
             $row.append("<td>" + data[i]['upload-time'] + "</td>");
+            $row.append("<td>" + data[i]['size'] + "</td>");
         }
     })
 }

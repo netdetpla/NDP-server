@@ -22,8 +22,8 @@ function getTasks(imageName) {
     $.get("/task/" + imageName, {}, function (json) {
         let data = json.data;
         for (let i = 0; i < data.length; i++) {
-            $taskBody.append("<tr></tr>");
-            let $row = $taskBody.find("tr:last");
+            $tagBody.append("<tr></tr>");
+            let $row = $tagBody.find("tr:last");
             $row.append("<td>" + (data[i]['tid'] || "") + "</td>");
             $row.append("<td>" + (data[i]['task-name'] || "") + "</td>");
             $row.append("<td>" + (data[i]['start-time'] || "") + "</td>");
