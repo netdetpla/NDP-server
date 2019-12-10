@@ -1,7 +1,7 @@
 function submitImage() {
     // Get form
     let data = new FormData();
-    data.append("file", $("#imageFile").prop("files")[0]);
+    data.append("file", $imageFile.prop("files")[0]);
     data.append("image-name", $("#imageName").val());
     data.append("tag", $("#imageTag").val());
     data.append("test-param", "1");
@@ -27,8 +27,13 @@ function submitImage() {
         }
     });
 }
+
 // init
 let $uploadSubmit = $("#uploadSubmit");
 $uploadSubmit.on("click", function () {
     submitImage();
+});
+let $imageFile = $("#imageFile");
+$imageFile.on("change", function (e) {
+    $("#imageFileName").html(e.target.files[0].name)
 });
