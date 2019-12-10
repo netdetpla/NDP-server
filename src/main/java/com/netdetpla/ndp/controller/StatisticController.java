@@ -25,23 +25,21 @@ public class StatisticController {
         ResultSet resultSet = DatabaseHandler.executeQuery(
                 "select `port`, count(*) as c from `port` group by `port` order by c desc limit 8"
         );
-        String[] portLabels = new String[8];
-        int[] portData = new int[8];
-        for (int i = 0; i < 8; i++) {
-            resultSet.next();
-            portLabels[i] = String.valueOf(resultSet.getInt(1));
-            portData[i] = resultSet.getInt(2);
+        List<String> portLabels = new ArrayList<>();
+        List<Integer> portData = new ArrayList<>();
+        while (resultSet.next()) {
+            portLabels.add(String.valueOf(resultSet.getInt(1)));
+            portData.add(resultSet.getInt(2));
         }
         // 服务统计
         resultSet = DatabaseHandler.executeQuery(
-                "select `service`, count(*) as c from `port` where `service` != 'unknow' group by `service` order by c desc limit 8"
+                "select `service`, count(*) as c from `port` where `service` != 'unknown' group by `service` order by c desc limit 8"
         );
-        String[] serviceLabels = new String[8];
-        int[] serviceData = new int[8];
-        for (int i = 0; i < 8; i++) {
-            resultSet.next();
-            serviceLabels[i] = resultSet.getString(1);
-            serviceData[i] = resultSet.getInt(2);
+        List<String> serviceLabels = new ArrayList<>();
+        List<Integer> serviceData = new ArrayList<>();
+        while (resultSet.next()) {
+            serviceLabels.add(resultSet.getString(1));
+            serviceData.add(resultSet.getInt(2));
         }
         // 操作系统类型
         resultSet = DatabaseHandler.executeQuery(
@@ -49,39 +47,29 @@ public class StatisticController {
         );
         resultSet.next();
         int total = resultSet.getInt(1);
-        int osOthers = total;
         resultSet = DatabaseHandler.executeQuery(
                 "select `os_version`, count(*) as c from `ip` where `os_version` != 'unknown' group by `os_version` order by c desc limit 5"
         );
-        String[] osLabels = new String[6];
-        int[] osData = new int[6];
-        for (int i = 0; i < 5; i++) {
-            resultSet.next();
-            osLabels[i] = resultSet.getString(1);
-            osData[i] = resultSet.getInt(2);
-            osOthers -= osData[i];
+        List<String> osLabels = new ArrayList<>();
+        List<Integer> osData = new ArrayList<>();
+        while (resultSet.next()) {
+            osLabels.add(resultSet.getString(1));
+            osData.add(resultSet.getInt(2));
         }
-        osLabels[5] = "other";
-        osData[5] = osOthers;
         // 硬件类型
-        int hardwareOthers = total;
         resultSet = DatabaseHandler.executeQuery(
                 "select `hardware`, count(*) as c from `ip` where `hardware` != 'unknown' group by `hardware` order by c desc limit 5"
         );
-        String[] hardwareLabels = new String[6];
-        int[] hardwareData = new int[6];
-        for (int i = 0; i < 5; i++) {
-            resultSet.next();
-            hardwareLabels[i] = resultSet.getString(1);
-            hardwareData[i] = resultSet.getInt(2);
-            hardwareOthers -= hardwareData[i];
+        List<String> hardwareLabels = new ArrayList<>();
+        List<Integer> hardwareData = new ArrayList<>();
+        while (resultSet.next()) {
+            hardwareLabels.add(resultSet.getString(1));
+            hardwareData.add(resultSet.getInt(2));
         }
         resultSet = DatabaseHandler.executeQuery(
                 "select count(*) from ip"
         );
         resultSet.next();
-        hardwareLabels[5] = "other";
-        hardwareData[5] = hardwareOthers;
         Charts data = new Charts(
                 portLabels, portData,
                 serviceLabels, serviceData,

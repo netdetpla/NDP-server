@@ -1,18 +1,20 @@
 package com.netdetpla.ndp.bean;
 
-class Chart {
-    protected String[] labels;
-    protected int[] data;
+import java.util.List;
 
-    public String[] getLabels() {
+class Chart {
+    protected List<String> labels;
+    protected List<Integer> data;
+
+    public List<String> getLabels() {
         return labels;
     }
 
-    public int[] getData() {
+    public List<Integer> getData() {
         return data;
     }
 
-    public Chart(String[] labels, int[] data) {
+    public Chart(List<String> labels, List<Integer> data) {
         this.labels = labels;
         this.data = data;
     }
@@ -37,10 +39,10 @@ public class Charts {
     }
 
     public Charts(
-            String[] portLabels, int[] portData,
-            String[] serviceLabels, int[] serviceData,
-            String[] hardwareLabels, int[] hardwareData,
-            String[] osLabels, int[] osData
+            List<String> portLabels, List<Integer> portData,
+            List<String> serviceLabels, List<Integer> serviceData,
+            List<String> hardwareLabels, List<Integer> hardwareData,
+            List<String> osLabels, List<Integer> osData
     ) {
         this.port = new Chart(portLabels, portData);
         this.service = new Chart(serviceLabels, serviceData);

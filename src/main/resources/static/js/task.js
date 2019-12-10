@@ -17,7 +17,7 @@ function getImages() {
     });
 }
 function getTasks(imageName) {
-    let $tagBody = $("#imageTableBody");
+    let $tagBody = $("#taskTableBody");
     $tagBody.empty("tr");
     $.get("/task/" + imageName, {}, function (json) {
         let data = json.data;

@@ -1,7 +1,7 @@
 function submitTask() {
     let data = new FormData();
-    data.append("image-name", $("#selectImage").html());
-    data.append("tag", $("#selectTag").html());
+    data.append("image-name", $selectImageBtn.html());
+    data.append("tag", $selectTag.html());
     data.append("task-name", $("#taskName").val());
     data.append("priority", $("#taskPriority").val());
     let params = $("#taskParam").val().split(",");
@@ -44,7 +44,7 @@ function getImages() {
                 $selectTag.on("click", function () {
                     getTags($selectImageBtn.html());
                 });
-                $selectTag.removeProp("disabled");
+                $selectTag.attr("disabled", false);
             });
         }
     });
@@ -52,12 +52,12 @@ function getImages() {
 function getTags(imageName) {
     let $tagBody = $("#tagList");
     $tagBody.empty("button");
-    $.get("image/" + imageName, {}, function (json) {
+    $.get("/image/" + imageName, {}, function (json) {
         let data = json.data;
         for (let i = 0; i < data.length; i++) {
             $tagBody.append(
                 "<button type=\"button\"  data-dismiss=\"modal\" class=\"btn btn-primary animation-on-hover\">"
-                + data[i] + "</button>"
+                + data[i].tag + "</button>"
             );
             let $row = $tagBody.find("button:last");
             $row.on("click", function () {
@@ -72,4 +72,7 @@ let $selectImageBtn = $("#selectImage");
 let $selectTag = $("#selectTag");
 $selectImageBtn.on("click", function () {
     getImages();
+});
+$("#submitTask").on("click", function () {
+    submitTask()
 });
