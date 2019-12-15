@@ -276,4 +276,26 @@ public class ImageUtil {
             }
         }
     }
+
+    public static void pageCrawl(
+            int id,
+            String tidString,
+            int image_id,
+            String taskName,
+            String priority,
+            String[] params
+    ) {
+        String[] urls = urlSplit(params[0].split(","), 50, ",");
+
+        for (String url : urls) {
+            DatabaseHandler.execute(
+                    "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                    tidString,
+                    taskName,
+                    Integer.toString(image_id),
+                    url,
+                    priority
+            );
+        }
+    }
 }

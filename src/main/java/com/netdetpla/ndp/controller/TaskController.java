@@ -63,7 +63,7 @@ public class TaskController {
                 scanservice(id, tidString, image_id, taskName, priority, params, 24);
                 break;
             case "info_shell":
-                info_shell(id,tidString,image_id,taskName,priority,params);
+                info_shell(id, tidString, image_id, taskName, priority, params);
                 break;
             case "scandns":
                 scandns(id, tidString, image_id, taskName, priority, params);
@@ -79,6 +79,9 @@ public class TaskController {
                 break;
             case "port-scan":
                 portScan(id, tidString, image_id, taskName, priority, params);
+                break;
+            case "page-crawl":
+                pageCrawl(id, tidString, image_id, taskName, priority, params);
                 break;
             default:
                 break;
