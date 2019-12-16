@@ -1,9 +1,12 @@
 package com.netdetpla.ndp.utils;
 
 import com.netdetpla.ndp.handler.DatabaseHandler;
+import org.apache.logging.log4j.util.Strings;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import static com.netdetpla.ndp.utils.IpUtil.*;
 
@@ -259,7 +262,28 @@ public class ImageUtil {
             String[] params
     ) {
         String[] ips = ipSplit(params[0].split(","), 24);
-        String[] ports = urlSplit(portSplit(params[1].split(",")), 100, ",");
+        String[] ports = urlSplit(portSplit(params[1].split(",")), 20, ",");
+
+        List<String> ipSet = new ArrayList<>();
+        for (String port : ports) {
+            for (int i = 0, step = 0; i < ips.length; i++, step++) {
+                ipSet.add(ips[i]);
+                if (step >= 99 || i >= ips.length - 1) {
+                    String paramString = Strings.join(ipSet, ',') + ";" + port;
+                    // TODO 处理任务添加失败
+                    DatabaseHandler.execute(
+                            "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
+                            tidString,
+                            taskName,
+                            Integer.toString(image_id),
+                            paramString,
+                            priority
+                    );
+                }
+                step = 0;
+                ipSet.clear();
+            }
+        }
 
         for (String ip : ips) {
             for (String port : ports) {
