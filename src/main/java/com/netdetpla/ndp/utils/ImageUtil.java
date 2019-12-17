@@ -284,21 +284,6 @@ public class ImageUtil {
                 ipSet.clear();
             }
         }
-
-        for (String ip : ips) {
-            for (String port : ports) {
-                String paramString = ip + ";" + port;
-                // TODO 处理任务添加失败
-                DatabaseHandler.execute(
-                        "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
-                        tidString,
-                        taskName,
-                        Integer.toString(image_id),
-                        paramString,
-                        priority
-                );
-            }
-        }
     }
 
     public static void pageCrawl(
