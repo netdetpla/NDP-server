@@ -279,9 +279,9 @@ public class ImageUtil {
                             paramString,
                             priority
                     );
+                    step = 0;
+                    ipSet.clear();
                 }
-                step = 0;
-                ipSet.clear();
             }
         }
     }
