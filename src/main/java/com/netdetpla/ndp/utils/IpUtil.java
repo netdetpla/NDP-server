@@ -1,5 +1,7 @@
 package com.netdetpla.ndp.utils;
 
+import org.apache.logging.log4j.util.Strings;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,40 +226,24 @@ public class IpUtil {
 
 
     /**
-     * @param urlInput 待拆分的url
-     * @param subSize 拆分粒度
+     * @param urlInput  待拆分的url
+     * @param subSize   拆分粒度
      * @param separator 分隔符
      * @return 拆分结果
      */
     public static String[] urlSplit(String[] urlInput, int subSize, String separator) {
-        int count = urlInput.length % subSize == 0 ? urlInput.length / subSize: urlInput.length / subSize + 1;
-        String[] urls = new String[count];
-
-        for (int i = 0; i < count; i++) {
-            String tmp = "";
-            if (count - i == 1) {
-                for (int j = i * subSize; j < urlInput.length; j++) {
-                    if (urlInput.length - j == 1) {
-                        tmp = tmp + urlInput[j];
-                    } else {
-                        tmp = tmp + urlInput[j] + separator;
-                    }
-                }
-            } else {
-                for (int j = i * subSize; j < (i + 1) * subSize; j++) {
-                    if ((i + 1) * subSize - j == 1) {
-                        tmp = tmp + urlInput[j];
-                    } else {
-                        tmp = tmp + urlInput[j] + separator;
-                    }
-                }
+        List<String> urls = new ArrayList<>();
+        List<String> oneSet = new ArrayList<>();
+        for (int i = 0, j = 0; i < urlInput.length; i++, j++) {
+            oneSet.add(urlInput[i]);
+            if (j >= subSize - 1) {
+                urls.add(Strings.join(oneSet, separator.charAt(0)));
+                oneSet.clear();
+                j = 0;
             }
-            urls[i] = tmp;
         }
-//        for (int i = 0; i < urls.length; i++) {
-//            System.out.println(urls[i]);
-//        }
-        return urls;
+        urls.add(Strings.join(oneSet, separator.charAt(0)));
+        return urls.toArray(new String[0]);
     }
 
 

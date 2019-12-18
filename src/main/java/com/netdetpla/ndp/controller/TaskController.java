@@ -83,6 +83,9 @@ public class TaskController {
             case "page-crawl":
                 pageCrawl(id, tidString, image_id, taskName, priority, params);
                 break;
+            case "url-crawl":
+                urlCrawl(id, tidString, image_id, taskName, priority, params);
+                break;
             default:
                 break;
         }
