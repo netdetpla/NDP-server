@@ -214,18 +214,18 @@ public class ImageUtil {
             for (int j = 0; j < re_servers.length; j++) {
                 String paramString = id + "," + domains[i] + "," + re_servers[j] + "," + taskName + "," + id;
                 id++;
-                String paramBase64 = null;
-                try {
-                    paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+//                String paramBase64 = null;
+//                try {
+//                    paramBase64 = encoder.encodeToString(paramString.getBytes("UTF-8"));
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
                 DatabaseHandler.execute(
                         "insert into task(tid, task_name, image_id, param, priority) values (?, ?, ?, ?, ?)",
                         tidString,
                         taskName,
                         Integer.toString(image_id),
-                        paramBase64,
+                        paramString,
                         priority
                 );
             }
