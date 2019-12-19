@@ -22,7 +22,14 @@
         <div class="side-type-text">任务管理</div>
         <div class="collection blue darken-1 sidebar" style="border: 0;">
             <a href="#taskTable" class="collection-item blue darken-1 active" id="taskTableLink">任务列表</a>
+            <a href="#resultTable" class="collection-item blue darken-1 active" id="resultTableLink">结果列表</a>
             <a href="#taskCreate" class="collection-item blue darken-1 active">新建任务</a>
+        </div>
+        <div class="side-type-text">统计分析</div>
+        <div class="collection blue darken-1 sidebar" style="border: 0;">
+            <a href="#statisticTable" class="collection-item blue darken-1 active" id="statisticTableLink">统计图表</a>
+            <a href="#statisticMap" class="collection-item blue darken-1 active" id="statisticMapLink">IP散点图</a>
+            <a href="#searchTable" class="collection-item blue darken-1 active" id="searchTableLink">搜索统计</a>
         </div>
     </div>
     <!--镜像表格-->
@@ -84,10 +91,6 @@
                         <input id="imageTag" type="text" name="tag" class="validate">
                         <label for="imageTag">标签</label>
                     </div>
-                    <div class="input-field">
-                        <input id="testParam" type="text" name="test-param" class="validate">
-                        <label for="testParam">测试参数</label>
-                    </div>
                     <button class="btn waves-effect waves-light blue darken-1 right"
                             type="submit"
                             id="uploadSubmit">上传
@@ -129,6 +132,46 @@
                     <tbody id="taskTableBody">
                     </tbody>
                 </table>
+                <div id="pagination" style="margin-top: 10px;height: 35px;">
+                    <a id="firPage" onclick="firstPage()" style="margin-left: 0px;width: 35px;">首页</a>
+                    <a id="prePage" onclick="prevPage()">上一页</a>
+                    <a id="nexPage" onclick="pnextPage()">下一页</a>
+                    <a id="lasPage" onclick="lastPage()" style="width: 35px;">尾页</a>
+                    <input id="numPage" style="width: 40px;margin-left: 10px;height: 16px;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  结果展示  -->
+    <div class="col s10 hide full-height" id="resultTable">
+        <div class="row full-height">
+            <div class="col s3 full-height blue lighten-5">
+                <div>
+                    <h5>镜像列表</h5>
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>镜像名称</th>
+                        </tr>
+                        </thead>
+                        <tbody id="image4ResultTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col s1"></div>
+            <div class="col s9">
+                <h5 id="resultTitle"><span></span>对应结果列表</h5>
+                <table class="highlight">
+                    <thead>
+                    <tr>
+                        <th>结果ID</th>
+                        <th>任务ID</th>
+                    </tr>
+                    </thead>
+                    <tbody id="resultTableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -150,13 +193,79 @@
                         <input type="range" id="taskPriority" min="0" max="10"/>
                     </p>
                 </div>
-                <div class="input-field">
-                    <!--                    <input id="taskParam" type="text" class="validate">-->
-                    <textarea id="taskParam" class="materialize-textarea"></textarea>
-                    <label for="taskParam">任务参数</label>
+                <div id="paramDiv">
+                    <div class="input-field" id="paramshow">
+                        <textarea id="taskParam" class="materialize-textarea"></textarea>
+                        <label for="taskParam">任务参数</label>
+                    </div>
                 </div>
                 <button class="btn waves-effect waves-light blue darken-1 right" id="submitTask">下发
                 </button>
+            </div>
+            <div class="col s4"></div>
+        </div>
+    </div>
+    <!--统计图表-->
+    <div class="col s10 hide" id="statisticTable">
+        <h5>统计图表</h5>
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s10">
+                <div class="row">
+                    <h6>开放端口统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="portChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>开放服务统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>硬件类型统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="hardwareChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <h6>操作系统统计</h6>
+                    <div style="width: 600px; height: 400px;">
+                        <canvas id="osChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--IP散点图-->
+    <div class="col s10 hide" id="statisticMap">
+        <div id="mapContainer"></div>
+    </div>
+    <!--搜索统计-->
+    <div class="col s10 hide full-height" id="searchTable">
+        <div class="row form-fix">
+            <div class="col s4"></div>
+            <div class="col s4">
+                <input name="searchGroup" type="radio" id="searchPort" checked/>
+                <label for="searchPort">port</label>
+                <input name="searchGroup" type="radio" id="searchService"/>
+                <label for="searchService">service</label>
+                <!--                <input name="searchGroup" type="radio" id="searchIPSegment"/>-->
+                <!--                <label for="searchIPSegment">ip segment</label>-->
+                <div class="input-field">
+                    <input id="keyword" type="text" class="validate">
+                    <label for="keyword">内容</label>
+                </div>
+                <button class="btn waves-effect waves-light blue darken-1 right" id="submitSearch">搜索
+                </button>
+            </div>
+            <div class="col s4"></div>
+        </div>
+        <div class="row">
+            <div class="col s3"></div>
+            <div class="col s5 center" id="searchCharts">
+
             </div>
             <div class="col s4"></div>
         </div>
@@ -214,6 +323,50 @@
         </div>
     </div>
 </div>
+
+<!--子任务详情-->
+<div class="card horizontal" id="subTaskCard">
+    <div class="card-content">
+        <span class="card-title" id="subTaskTitle"></span>
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>子任务id</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>参数</th>
+                <th>子任务状态</th>
+                <th>优先级</th>
+            </tr>
+            </thead>
+            <tbody id="subTaskTableBody">
+            </tbody>
+        </table>
+        <div id="pagination2" style="margin-top: 10px;height: 35px;">
+            <a id="firPage2" onclick="firstPage2()" style="margin-left: 0px;width: 35px;">首页</a>
+            <a id="prePage2" onclick="prevPage2()">上一页</a>
+            <a id="nexPage2" onclick="pnextPage2()">下一页</a>
+            <a id="lasPage2" onclick="lastPage2()" style="width: 35px;">尾页</a>
+            <input id="numPage2" style="width: 40px;margin-left: 10px;height: 16px;"/>
+        </div>
+        <div class="card-action center">
+            <a id="cancelSubTask" class="waves-effect waves-light btn blue darken-1">确定</a>
+        </div>
+    </div>
+</div>
+<!--结果详情-->
+<div class="card horizontal" id="subResultCard">
+    <div class="card-content">
+        <span class="card-title">结果详情</span>
+        <div class="table-content row">
+            <table class="highlight col s8" id="subResultTable">
+            </table>
+        </div>
+        <div class="card-action center">
+            <a id="cancelSubResult" class="waves-effect waves-light btn blue darken-1">确定</a>
+        </div>
+    </div>
+</div>
 <!--选择镜像-->
 <div class="card horizontal" id="selectImageCard">
     <div class="card-content">
@@ -252,6 +405,9 @@
 </div>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/materialize.js"></script>
+<script src="js/Chart.bundle.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=e153ac2e0ec83b1c67f56bf86e236f5a"></script>
+<script src="https://webapi.amap.com/loca?v=1.3.0&key=e153ac2e0ec83b1c67f56bf86e236f5a"></script>
 <script src="js/index.js"></script>
 </body>
 </html>

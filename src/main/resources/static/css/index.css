@@ -2,7 +2,7 @@
     padding: 10px;
 }
 
-#imageTable, #taskTable {
+#imageTable, #taskTable, #resultTable, #searchTable {
     padding-left: 0;
 }
 
@@ -10,6 +10,16 @@
     display: none;
     position: absolute;
     width: 600px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+#subTaskCard, #subResultCard {
+    display: none;
+    position: absolute;
+    width: 1000px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -26,4 +36,29 @@
     width: 500px;
     max-height: 550px;
     overflow: auto;
+}
+
+#pagination, #pagination2 {
+
+    width: 500px;
+    height: 100px;
+    float: left;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#statisticTable, #searchTable {
+    overflow: scroll;
+    height: 100%;
+}
+
+#statisticMap {
+    height: 100%;
+    padding: 0;
+}
+#mapContainer {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
 }

@@ -6,7 +6,7 @@ import java.sql.*;
 @Component
 public class DatabaseHandler {
     private static Connection connection = null;
-    private static String url = "jdbc:mysql://127.0.0.1:3306/ndp?serverTimezone=GMT%2B8";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/ndp?serverTimezone=UTC";
 	private static String drivername = "com.mysql.cj.jdbc.Driver";
 	private static String username = "root";
 	private static String password = "password" ;
@@ -17,12 +17,13 @@ public class DatabaseHandler {
             connection = DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             e.printStackTrace();
+//            System.out.println(((java.sql.SQLException)e).getErrorCode());
             System.exit(-1);
         }
     }
 
-    public static Connection getConnection() {
-        if (connection != null) {
+    public static Connection getConnection() throws SQLException {
+        if (connection != null && connection.isValid(5)) {
             return connection;
         }
         try {
@@ -57,7 +58,7 @@ public class DatabaseHandler {
     }
 
     private static PreparedStatement generateQuery(String sql, String[] args) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
         for (int i = 0; i < args.length; i++) {
             preparedStatement.setString(i + 1, args[i]);
         }

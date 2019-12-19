@@ -47,9 +47,10 @@ public class ImageController {
         String size = "";
         try {
 //            saveUploadedFiles(Collections.singletonList(uploadFile));
-            writeToLocal("/storage/" + uploadFile.getOriginalFilename(), uploadFile.getInputStream());
+            writeToLocal("/root/image/" + uploadFile.getOriginalFilename(), uploadFile.getInputStream());
             size = String.format("%.2fMB", (double) uploadFile.getSize() / 1024 / 1024);
         } catch (IOException e) {
+            System.out.println(e.toString());
             return new ResponseEntity<>(new ResponseEnvelope<>(
                     HttpStatus.BAD_REQUEST.value(),
                     "Bad Request"
@@ -63,11 +64,12 @@ public class ImageController {
         SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(time.format(nowTime));
         DatabaseHandler.execute(
-                "insert into image(image_name, tag, `size`, upload_time) values (?, ?, ?, ?)",
+                "insert into image(image_name, tag, `size`, upload_time, file_name) values (?, ?, ?, ?, ?)",
                 imageName,
                 tag,
                 size,
-                time.format(nowTime)
+                time.format(nowTime),
+                uploadFile.getOriginalFilename()
         );
         return new ResponseEntity<>(new ResponseEnvelope<>(
                 HttpStatus.OK.value(),
@@ -93,13 +95,14 @@ public class ImageController {
     public ResponseEntity<?> getTags(@PathVariable(value = "image_name") String imageName) throws SQLException {
         List<Image> data = new ArrayList<>();
         ResultSet resultSet = DatabaseHandler.executeQuery(
-                "select tag, upload_time from image where image_name = ?",
+                "select tag, upload_time, `size` from image where image_name = ?",
                 imageName
         );
         while (resultSet.next()) {
             data.add(new Image(
                     resultSet.getString(1),
-                    resultSet.getString(2)
+                    resultSet.getString(2),
+                    resultSet.getString(3)
             ));
         }
         return new ResponseEntity<>(new ResponseEnvelope<>(

@@ -35,6 +35,7 @@ public class Image {
     private boolean currentUse;
     @JsonProperty(value = "upload-time")
     private String uploadTime;
+    @JsonProperty(value = "size")
     private String size;
     private ImageTest test;
 
@@ -66,9 +67,10 @@ public class Image {
         this.test = new ImageTest(cpu, memory, bandwidth);
     }
 
-    public Image(String tag, String uploadTime) {
+    public Image(String tag, String uploadTime, String size) {
         this.tag = tag;
         this.uploadTime = uploadTime;
+        this.size = size;
     }
 
     public Image(
