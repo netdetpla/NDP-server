@@ -5,6 +5,7 @@ import com.ndp.server.utils.DatabaseHandler
 import com.ndp.server.utils.TaskGenerator
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -79,5 +80,10 @@ class TaskController {
                 HttpStatus.OK.value(),
                 "Create task successfully."
         ), HttpStatus.OK)
+    }
+
+    @GetMapping("/task")
+    fun getTask() {
+
     }
 }

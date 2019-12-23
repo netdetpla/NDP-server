@@ -1,0 +1,8 @@
+.process-primary {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(rgb(161, 196, 253) 0%, rgb(194, 233, 251) 100%);
+}
+
+.process-back {
+    background-color: #222a42;
+}

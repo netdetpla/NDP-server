@@ -17,6 +17,7 @@
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet"/>
+    <link href="../css/task.css" rel="stylesheet">
 </head>
 
 <body class=" ">
@@ -46,6 +47,12 @@
                     <a href="/pages/new.html">
                         <i class="tim-icons icon-simple-add"></i>
                         <p>任务创建</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pages/auto.html">
+                        <i class="tim-icons icon-minimal-down"></i>
+                        <p>批量下发</p>
                     </a>
                 </li>
                 <li>
@@ -82,28 +89,9 @@
         <div class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card  card-plain">
-                        <div class="card-header">
-                            <h4 class="card-title">镜像</h4>
-                            <p class="category">请选择一种镜像</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle animation-on-hover"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        id="selectImageBtn">
-                                    镜像种类
-                                </button>
-                                <div class="dropdown-menu dropdown-black" id="imageList">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
                     <div class="card ">
                         <div class="card-header">
-                            <h4 class="card-title">对应任务列表</h4>
+                            <h4 class="card-title">正在执行</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -112,8 +100,9 @@
                                     <tr>
                                         <th>任务ID</th>
                                         <th>任务名称</th>
-                                        <th>开始时间</th>
-                                        <th>结束时间</th>
+                                        <th>镜像</th>
+                                        <th>tag</th>
+                                        <th>完成比例</th>
                                     </tr>
                                     </thead>
                                     <tbody id="taskTableBody">
@@ -125,14 +114,48 @@
                                             test
                                         </td>
                                         <td>
-                                            2019-12-07 10:48:36
+                                            ip-test
                                         </td>
                                         <td>
-                                            2019-12-07 10:48:36
+                                            1.01
+                                        </td>
+                                        <td>
+                                            <span>99%</span>
+                                            <div class="progress process-back">
+                                                <div class="progress-bar process-primary" role="progressbar"
+                                                     style="width: 23.2%"
+                                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <h4 class="card-title">已完成任务统计</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="finishedTaskChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <h4 class="card-title">未完成任务统计</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="waitingTaskChart"></canvas>
                             </div>
                         </div>
                     </div>

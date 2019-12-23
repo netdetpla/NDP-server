@@ -21,6 +21,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("mysql:mysql-connector-java:8.0.18")
     implementation("me.liuwj.ktorm:ktorm-core:2.6")
     implementation("me.liuwj.ktorm:ktorm-jackson:2.6")
     implementation("me.liuwj.ktorm:ktorm-support-mysql:2.6")

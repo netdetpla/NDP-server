@@ -94,7 +94,7 @@ object DatabaseHandler {
         }
     }
 
-    fun batchInsertTasks(
+    private fun batchInsertTasks(
             tid: Int,
             taskName: String,
             imageID: Int,
@@ -208,6 +208,61 @@ object DatabaseHandler {
                 priority,
                 urls
         )
+    }
+
+    private fun getData(ipRange: String, column: Column<*>, port: Int, service: String): Map<String, Int> {
+        var ipStart = 0L
+        var ipEnd = 0L
+        if (ipRange != "") {
+            when {
+                ipRange.contains("/") -> {
+                    val set = ipRange.split("/")
+                    ipStart = TaskGenerator.iNetString2Number(set[0])
+                    ipEnd = TaskGenerator.parseIPEnd(ipStart, Integer.parseInt(set[1]))
+                }
+                ipRange.contains("-") -> {
+                    val set = ipRange.split("-")
+                    ipStart = TaskGenerator.iNetString2Number(set[0])
+                    ipEnd = TaskGenerator.iNetString2Number(set[1])
+                }
+                else -> {
+                    ipStart = TaskGenerator.iNetString2Number(ipRange)
+                }
+            }
+        }
+        val map = HashMap<String, Int>()
+        val count = count(Port.id).aliased("c")
+
+        Port.select(column, count)
+                .whereWithConditions {
+                    if (ipStart != 0L) {
+                        it += Port.ipID greaterEq ipStart
+                        it += Port.ipID lessEq ipEnd
+                    } else {
+                        it += Port.ipID eq ipStart
+                    }
+                    if (port != 0) {
+                        it += Port.port eq port
+                    }
+                    if (service != "") {
+                        it += Port.service eq service
+                    }
+                }
+                .groupBy(Port.port)
+                .orderBy(count.desc())
+                .limit(0, 8)
+                .forEach {
+                    map[it[Port.port]!!.toString()] = it[count]!!
+                }
+        return map
+    }
+
+    fun getPortData(ipRange: String = "", service: String = ""): Map<String, Int> {
+        return getData(ipRange, Port.port, 0, service)
+    }
+
+    fun getServiceData(ipRange: String = "", port: Int = 0): Map<String, Int> {
+        return getData(ipRange, Port.service, port, "")
     }
     // TODO FLAG
 
