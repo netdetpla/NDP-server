@@ -4,6 +4,7 @@ import com.ndp.server.bean.Chart
 import com.ndp.server.bean.ChartsJson
 import com.ndp.server.bean.ResponseEnvelope
 import com.ndp.server.utils.DatabaseHandler
+import com.ndp.server.utils.Miscellaneous
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,21 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class StatisticController {
 
-    fun parseChartMap(map: Map<String, Int>): Chart {
-        val labels = ArrayList<String>()
-        val count = ArrayList<Int>()
-        for (k in map.keys) {
-            labels.add(k)
-            count.add(map[k] ?: 0)
-        }
-        return Chart(labels, count)
-    }
-
     @GetMapping("/statistic/charts")
     fun getCharts(): ResponseEntity<*>? {
 
-        val portChart = parseChartMap(DatabaseHandler.getPortData())
-        val serviceChart = parseChartMap(DatabaseHandler.getServiceData())
+        val portChart = Miscellaneous.parseChartMap(DatabaseHandler.getPortData())
+        val serviceChart = Miscellaneous.parseChartMap(DatabaseHandler.getServiceData())
 
         val data = ChartsJson(portChart, serviceChart)
         return ResponseEntity(ResponseEnvelope(
@@ -45,7 +36,7 @@ class StatisticController {
     ): ResponseEntity<*>? {
         when (type) {
             "port" -> {
-                val data = parseChartMap(DatabaseHandler.getServiceData(port = Integer.parseInt(keyword)))
+                val data = Miscellaneous.parseChartMap(DatabaseHandler.getServiceData(port = Integer.parseInt(keyword)))
                 return ResponseEntity(ResponseEnvelope(
                         HttpStatus.OK.value(),
                         "OK",
@@ -53,7 +44,7 @@ class StatisticController {
                 ), HttpStatus.OK)
             }
             "service" -> {
-                val data = parseChartMap(DatabaseHandler.getPortData(service = keyword))
+                val data = Miscellaneous.parseChartMap(DatabaseHandler.getPortData(service = keyword))
                 return ResponseEntity(ResponseEnvelope(
                         HttpStatus.OK.value(),
                         "OK",
@@ -61,8 +52,8 @@ class StatisticController {
                 ), HttpStatus.OK)
             }
             "ip" -> {
-                val portChart = parseChartMap(DatabaseHandler.getPortData(ipRange = keyword))
-                val serviceChart = parseChartMap(DatabaseHandler.getServiceData(ipRange = keyword))
+                val portChart = Miscellaneous.parseChartMap(DatabaseHandler.getPortData(ipRange = keyword))
+                val serviceChart = Miscellaneous.parseChartMap(DatabaseHandler.getServiceData(ipRange = keyword))
 
                 val data = ChartsJson(portChart, serviceChart)
                 return ResponseEntity(ResponseEnvelope(

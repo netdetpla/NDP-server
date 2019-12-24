@@ -1,10 +1,8 @@
 function setCharts() {
     let portLabels, portData;
     let serviceLabels, serviceData;
-    let hardwareLabels, hardwareData;
-    let osLabels, osData;
     $.get("/statistic/charts", {}, function (json) {
-        let data = json.data;
+        let data = json['data'];
         portLabels = data["port"]["labels"];
         portData = data["port"]["data"];
         serviceLabels = data["service"]["labels"];

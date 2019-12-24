@@ -16,13 +16,14 @@
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet"/>
+    <link href="../css/auto.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="wrapper ">
     <div class="sidebar">
         <div class="sidebar-wrapper">
             <ul class="nav">
-                <li class="active ">
+                <li>
                     <a href="/pages/image.html">
                         <i class="tim-icons icon-bullet-list-67"></i>
                         <p>镜像列表</p>
@@ -46,7 +47,7 @@
                         <p>任务创建</p>
                     </a>
                 </li>
-                <li>
+                <li class="active ">
                     <a href="/pages/auto.html">
                         <i class="tim-icons icon-minimal-down"></i>
                         <p>批量下发</p>
@@ -85,27 +86,164 @@
         <!-- End Navbar -->
         <div class="content">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="card ">
                         <div class="card-header">
-                            <h4 class="card-title">IP测活</h4>
+                            <h4 class="card-title">IP测活 - 从GeoIP中选取</h4>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>从GeoIP中选取</h5>
-                                    <div class="form-group">
-                                        <label for="ipTestGeoNum">请输入下发数量</label>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <input id="ipTestGeoNum" type="text" class="form-control">
+                                        <label for="ipTestGeoNum">请输入下发数量</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <h5>从域名解析值中选取</h5>
-                                    <div class="form-group">
-                                        <label for="ipTestARecordNum">请输入下发数量</label>
-                                        <input id="ipTestARecordNum" type="text" class="form-control">
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="ipTestGeoSubmit">下发
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">
+                            <h4 class="card-title">服务端口扫描</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress process-back">
+                                <div class="progress-bar process-primary" role="progressbar"
+                                     style="width: 23.2%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row process-margin-fix">
+                                <div class="col-md-12 text-primary">
+                                    可下发数量 <span id="portScanProcess">345 / 1000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input id="portScanNum" type="text" class="form-control">
+                                        <label for="portScanNum">请输入下发数量</label>
                                     </div>
                                 </div>
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="portScanSubmit">下发
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">
+                            <h4 class="card-title">url爬取</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress process-back">
+                                <div class="progress-bar process-primary" role="progressbar"
+                                     style="width: 23.2%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row process-margin-fix">
+                                <div class="col-md-12 text-primary">
+                                    可下发数量 <span id="urlCrawlProcess">345 / 1000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input id="urlCrawlNum" type="text" class="form-control">
+                                        <label for="urlCrawlNum">请输入下发数量</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="urlCrawlSubmit">下发
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h4 class="card-title">IP测活 - 从域名解析值中选取</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress process-back">
+                                <div class="progress-bar process-primary" role="progressbar"
+                                     style="width: 23.2%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row process-margin-fix">
+                                <div class="col-md-12 text-primary">
+                                    可下发数量 <span id="ipTestAProcess">345 / 1000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input id="ipTestANum" type="text" class="form-control">
+                                        <label for="ipTestANum">请输入下发数量</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="ipTestASubmit">下发
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">
+                            <h4 class="card-title">域名解析</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress process-back">
+                                <div class="progress-bar process-primary" role="progressbar"
+                                     style="width: 23.2%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row process-margin-fix">
+                                <div class="col-md-12 text-primary">
+                                    可下发数量 <span id="dnssecureProcess">345 / 1000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input id="dnssecureNum" type="text" class="form-control">
+                                        <label for="dnssecureNum">请输入下发数量</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="dnssecureSubmit">下发
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">
+                            <h4 class="card-title">网页爬取</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress process-back">
+                                <div class="progress-bar process-primary" role="progressbar"
+                                     style="width: 23.2%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row process-margin-fix">
+                                <div class="col-md-12 text-primary">
+                                    可下发数量 <span id="pageCrawlProcess">345 / 1000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input id="pageCrawlNum" type="text" class="form-control">
+                                        <label for="pageCrawlNum">请输入下发数量</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-fill btn-primary animation-on-hover"
+                                        id="pageCrawlSubmit">下发
+                                </button>
                             </div>
                         </div>
                     </div>

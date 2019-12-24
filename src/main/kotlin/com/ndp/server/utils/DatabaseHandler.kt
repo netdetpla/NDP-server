@@ -4,6 +4,7 @@ import com.ndp.server.bean.*
 import me.liuwj.ktorm.database.Database
 import me.liuwj.ktorm.dsl.*
 import me.liuwj.ktorm.schema.Column
+import me.liuwj.ktorm.schema.Table
 
 object DatabaseHandler {
 
@@ -71,8 +72,8 @@ object DatabaseHandler {
     }
 
     fun selectMaxTid(): Int {
-        val tid = TopTask.select(max(TopTask.tid))
-                .map { it[TopTask.tid] ?: 0 }
+        val tid = Task.select(max(Task.tid))
+                .map { it[Task.tid] ?: 0 }
         return if (tid.isNotEmpty()) tid[0] else 1
     }
 
@@ -80,18 +81,6 @@ object DatabaseHandler {
         val id = Task.select(max(Task.id))
                 .map { it[Task.id] ?: 0 }
         return if (id.isNotEmpty()) id[0] else 1
-    }
-
-    fun insertTopTask(
-            imageID: Int,
-            startID: Int,
-            endID: Int
-    ) {
-        TopTask.insert {
-            it.imageID to imageID
-            it.startID to startID
-            it.endID to endID
-        }
     }
 
     private fun batchInsertTasks(
@@ -264,8 +253,146 @@ object DatabaseHandler {
     fun getServiceData(ipRange: String = "", port: Int = 0): Map<String, Int> {
         return getData(ipRange, Port.service, port, "")
     }
-    // TODO FLAG
 
+    fun selectRunningTopTask(): List<Int> {
+        val tids = ArrayList<Int>()
+        Task.selectDistinct(Task.tid)
+                .whereWithOrConditions {
+                    it += Task.taskStatus eq 20010
+                    it += Task.taskStatus eq 20020
+                }
+                .forEach { tids.add(it[Task.tid]!!) }
+        return tids
+    }
+
+    fun selectImageInfoByID(imageID: Int): ImageJson {
+        return Image.select(Image.imageName, Image.tag)
+                .where { Image.id eq imageID }
+                .limit(0, 1)
+                .map {
+                    ImageJson(
+                            it[Image.imageName]!!,
+                            it[Image.tag]!!,
+                            "",
+                            ""
+                    )
+                }
+                .toList()[0]
+    }
+
+    fun selectTaskInfo(tid: Int): TaskJson {
+        val imageID = Task.select(Task.imageID)
+                .where { Task.tid eq tid }
+                .limit(0, 1)
+                .map { it[Task.imageID]!! }
+                .toList()[0]
+        val imageInfo = selectImageInfoByID(imageID)
+
+        val taskName = Task.select(Task.taskName)
+                .where { Task.tid eq tid }
+                .limit(0, 1)
+                .map { it[Task.taskName]!! }
+                .toList()[0]
+
+        val count = count(Task.id).aliased("c")
+        val total = Task.select(count)
+                .where { Task.tid eq tid }
+                .map { it[count]!! }
+                .toList()[0]
+        val waiting = Task.select(count)
+                .whereWithConditions {
+                    it += Task.tid eq tid
+                    it += Task.taskStatus eq 20000
+                }
+                .map { it[count]!! }
+                .toList()[0]
+        return TaskJson(
+                tid,
+                taskName,
+                imageInfo.imageName,
+                imageInfo.tag,
+                total,
+                total - waiting
+        )
+    }
+
+    fun getTaskGroupByImage(isFinished: Boolean): Map<String, Int> {
+        val idMap = HashMap<Int, Int>()
+        val count = count(Task.id).aliased("c")
+        Task.select(Task.imageID, count)
+                .where {
+                    if (isFinished)
+                        Task.taskStatus notInList arrayListOf(20000, 20010, 20020)
+                    else
+                        Task.taskStatus inList arrayListOf(20000, 20010, 20020)
+                }
+                .groupBy(Task.imageID)
+                .orderBy(count.desc())
+                .forEach { idMap[it[Task.imageID]!!] = it[count]!! }
+        val map = HashMap<String, Int>()
+        for (k in idMap.keys) {
+            val imageName = selectImageInfoByID(k).imageName
+            map[imageName] = map.getOrDefault(imageName, 0) + idMap[k]!!
+        }
+        return map
+    }
+
+    fun getFinishedTask(): Map<String, Int> {
+        return getTaskGroupByImage(true)
+    }
+
+    fun getUnfinishedTask(): Map<String, Int> {
+        return getTaskGroupByImage(false)
+    }
+
+    fun selectAvailable(
+            table: Table<Nothing>, idColumn: Column<Int>, column: Column<Int>
+    ): Map<Int, Int> {
+        val count = count(idColumn).aliased("c")
+        val map = HashMap<Int, Int>()
+        table.select(column, count)
+                .groupBy(column)
+                .orderBy(count.desc())
+                .forEach { map[it[column]!!] = it[count]!! }
+        return map
+    }
+
+    fun selectIPTestAAvailable(): AvailableJson {
+        val map = selectAvailable(DomainIP, DomainIP.id, DomainIP.ipTestFlag)
+        val available = map.getOrDefault(0, 0)
+        val total = map.getOrDefault(1, 0) + available
+        return AvailableJson(total, available)
+    }
+
+    fun selectPortScanAvailable(): AvailableJson {
+        val map = selectAvailable(IP, IP.id, IP.portScanFlag)
+        val available = map.getOrDefault(0, 0)
+        val total = map.getOrDefault(1, 0) + available
+        return AvailableJson(total, available)
+    }
+
+    fun selectDnssecureAvailable(): AvailableJson {
+        val map = selectAvailable(Page, Page.id, Page.dnssecureFlag)
+        val available = map.getOrDefault(0, 0)
+        val total = map.getOrDefault(1, 0) + available
+        return AvailableJson(total, available)
+    }
+
+    fun selectURLCrawlAvailable(): AvailableJson {
+        val map = selectAvailable(Page, Page.id, Page.urlFlag)
+        val available = map.getOrDefault(0, 0)
+        val total = map.getOrDefault(1, 0) + available
+        return AvailableJson(total, available)
+    }
+
+    fun selectPageCrawlAvailable(): AvailableJson {
+        val map = selectAvailable(Page, Page.id, Page.pageFlag)
+        val available = map.getOrDefault(0, 0)
+        val total = map.getOrDefault(1, 0) + available
+        return AvailableJson(total, available)
+    }
+
+    // TODO FLAG
     fun getIPByCountry(country: String, offset: Int, limit: Int): List<String> {
         return Block
                 .select(Block.network, Block.geoNameID)
