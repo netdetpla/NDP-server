@@ -392,6 +392,14 @@ object DatabaseHandler {
         return AvailableJson(total, available)
     }
 
+    fun selectNewImageID(imageName: String): Int {
+        return Image.select(Image.id)
+                .where { Image.imageName eq imageName }
+                .orderBy(Image.id.desc())
+                .map { it[Image.id]!! }
+                .toList()[0]
+    }
+
     // TODO FLAG
     fun getIPByCountry(country: String, offset: Int, limit: Int): List<String> {
         return Block

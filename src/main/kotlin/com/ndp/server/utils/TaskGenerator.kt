@@ -29,7 +29,7 @@ object TaskGenerator {
         return segments.joinToString(".")
     }
 
-    fun ipMask2ipArray(ipMask: String): List<String> {
+    private fun ipMask2ipArray(ipMask: String): List<String> {
         val set = ipMask.split("/")
         val ipStart = iNetString2Number(set[0])
         val ipEnd = parseIPEnd(ipStart, Integer.parseInt(set[1]))
@@ -42,7 +42,7 @@ object TaskGenerator {
                 .toList()
     }
 
-    fun ports2portArray(ports: String): List<String> {
+    private fun ports2portArray(ports: String): List<String> {
         val set = ports.split("-")
         val portStart = Integer.parseInt(set[0])
         val portEnd = Integer.parseInt(set[1])
@@ -52,7 +52,7 @@ object TaskGenerator {
     }
 
     // 对List<String>分组
-    fun normalGroup(
+    private fun normalGroup(
             stringArray: List<String>,
             groupSize: Int,
             separator: String
@@ -72,7 +72,7 @@ object TaskGenerator {
         return groups
     }
 
-    fun ipGroup(
+    private fun ipGroup(
             ips: List<String>,
             groupSize: Int,
             separator: String
@@ -88,7 +88,7 @@ object TaskGenerator {
         return normalGroup(splitIPs, groupSize, separator)
     }
 
-    fun portGroup(
+    private fun portGroup(
             ports: List<String>,
             groupSize: Int,
             separator: String

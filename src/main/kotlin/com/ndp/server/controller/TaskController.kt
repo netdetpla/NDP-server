@@ -4,16 +4,18 @@ import com.ndp.server.bean.ResponseEnvelope
 import com.ndp.server.bean.TaskJson
 import com.ndp.server.utils.DatabaseHandler
 import com.ndp.server.utils.Miscellaneous
+import com.ndp.server.utils.Settings
 import com.ndp.server.utils.TaskGenerator
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class TaskController {
+    private val ipCount = Integer.parseInt(Settings.setting["ipCount"] as String)
+    private val country = Settings.setting["ipCountry"] as String
+    private val ports = Settings.setting["portScanPort"] as String
+    private val dnsServer = Settings.setting["dnsServer"] as String
 
     @PostMapping("/task")
     fun addTask(
@@ -165,5 +167,134 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
+    @PutMapping("/task/batchAdd/ipTestGeo")
+    fun batchAddIPTestGeoTask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val target = DatabaseHandler.getIPByCountry(country, ipCount, limit)
+        Settings.setting["ipCount"] = (ipCount + limit).toString()
+        val imageID = DatabaseHandler.selectNewImageID("ip-test")
+        val tid = DatabaseHandler.selectMaxTid()
+        for (t in target) {
+            TaskGenerator.ipTest(
+                    tid,
+                    imageID,
+                    "batch-add-ip-test-geo",
+                    "5",
+                    arrayOf(t)
+            )
+        }
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
 
+    @PutMapping("/task/batchAdd/ipTestA")
+    fun batchAddIPTestATask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val target = DatabaseHandler.getIPByDomainIP(limit)
+        val imageID = DatabaseHandler.selectNewImageID("ip-test")
+        val tid = DatabaseHandler.selectMaxTid()
+        for (t in target) {
+            TaskGenerator.ipTest(
+                    tid,
+                    imageID,
+                    "batch-add-ip-test-a",
+                    "5",
+                    arrayOf(t)
+            )
+        }
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
+
+    @PutMapping("/task/batchAdd/portScan")
+    fun batchAddPortScanTask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val ips = DatabaseHandler.getIPByPortScanFlag(limit).joinToString(",")
+        val imageID = DatabaseHandler.selectNewImageID("port-scan")
+        val tid = DatabaseHandler.selectMaxTid()
+        TaskGenerator.portScan(
+                tid,
+                imageID,
+                "batch-add-port-scan",
+                "5",
+                arrayOf(ips, ports)
+        )
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
+
+    @PutMapping("/task/batchAdd/dnssecure")
+    fun batchAddDnssecureTask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val urls = DatabaseHandler.getUrlByDnssecureFlag(limit)
+        val imageID = DatabaseHandler.selectNewImageID("dnssecure")
+        val tid = DatabaseHandler.selectMaxTid()
+        TaskGenerator.dnssecure(
+                tid,
+                imageID,
+                "batch-add-dnssecure",
+                "5",
+                arrayOf(urls.joinToString("+"), dnsServer)
+        )
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
+
+    @PutMapping("/task/batchAdd/urlCrawl")
+    fun batchAddURLCrawlTask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val urls = DatabaseHandler.getUrlByUrlFlag(limit).joinToString(",")
+        val imageID = DatabaseHandler.selectNewImageID("url-crawl")
+        val tid = DatabaseHandler.selectMaxTid()
+        TaskGenerator.urlCrawl(
+                tid,
+                imageID,
+                "batch-add-url-crawl",
+                "5",
+                arrayOf(urls)
+        )
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
+
+    @PutMapping("/task/batchAdd/pageCrawl")
+    fun batchAddPageCrawlTask(
+            @RequestParam("num") num: String
+    ): ResponseEntity<*>? {
+        val limit = Integer.parseInt(num)
+        val urls = DatabaseHandler.getUrlByUrlFlag(limit).joinToString(",")
+        val imageID = DatabaseHandler.selectNewImageID("page-crawl")
+        val tid = DatabaseHandler.selectMaxTid()
+        TaskGenerator.pageCrawl(
+                tid,
+                imageID,
+                "batch-add-page-crawl",
+                "5",
+                arrayOf(urls)
+        )
+        return ResponseEntity(ResponseEnvelope<Any?>(
+                HttpStatus.OK.value(),
+                "Create task successfully."
+        ), HttpStatus.OK)
+    }
 }

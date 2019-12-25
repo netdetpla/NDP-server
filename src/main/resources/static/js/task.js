@@ -34,11 +34,11 @@ function getRunningTask() {
 }
 
 function drawTaskCharts() {
-    $.get("/task/finished", {},function (json) {
+    $.get("/task/finished", {}, function (json) {
         let data = json['data'];
         drawChart($("#finishedTaskChart")[0], data['labels'], data['data']);
     });
-    $.get("/task/unfinished", {},function (json) {
+    $.get("/task/unfinished", {}, function (json) {
         let data = json['data'];
         drawChart($("#waitingTaskChart")[0], data['labels'], data['data']);
     });
