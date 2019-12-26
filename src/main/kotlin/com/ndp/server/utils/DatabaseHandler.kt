@@ -5,7 +5,9 @@ import me.liuwj.ktorm.database.Database
 import me.liuwj.ktorm.dsl.*
 import me.liuwj.ktorm.schema.Column
 import me.liuwj.ktorm.schema.Table
+import org.springframework.stereotype.Component
 
+@Component
 object DatabaseHandler {
 
     private val dbUrl = Settings.setting["dbUrl"] as String
@@ -39,8 +41,7 @@ object DatabaseHandler {
     }
 
     fun selectImage(): List<String> {
-        return Image.select(Image.imageName)
-                .distinct()
+        return Image.selectDistinct(Image.imageName)
                 .map { it[Image.imageName]!! }
                 .toCollection(ArrayList())
     }
