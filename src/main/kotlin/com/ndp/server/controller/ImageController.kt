@@ -29,17 +29,21 @@ class ImageController {
         input.close()
     }
 
+    class Upload(val imageName: String, val tag: String, val testParam: String)
+
     // 上传镜像
     @PostMapping("/image/upload")
+
     fun uploadFile(
-            @RequestParam("file") uploadFile: MultipartFile,
+            @RequestParam("file") file: MultipartFile,
             @RequestParam("image-name") imageName: String,
             @RequestParam("tag") tag: String,
             @RequestParam("test-param") testParam: String
     ): ResponseEntity<*>? {
-        val size = try { //            saveUploadedFiles(Collections.singletonList(uploadFile));
-            writeToLocal("/root/image/" + uploadFile.originalFilename, uploadFile.inputStream)
-            String.format("%.2fMB", uploadFile.size.toDouble() / 1024 / 1024)
+        println(file.originalFilename)
+        val size = try {
+            writeToLocal("/root/image/" + file.originalFilename, file.inputStream)
+            String.format("%.2fMB", file.size.toDouble() / 1024 / 1024)
         } catch (e: IOException) {
             println(e.toString())
             return ResponseEntity(ResponseEnvelope<Any?>(
@@ -59,13 +63,15 @@ class ImageController {
                 tag,
                 size,
                 time.format(nowTime),
-                uploadFile.originalFilename ?: ""
+                file.originalFilename ?: ""
         )
         return ResponseEntity(ResponseEnvelope<Any?>(
                 HttpStatus.OK.value(),
                 "Image has been uploaded."
         ), HttpStatus.OK)
     }
+
+
 
     @GetMapping("/image")
     fun getImages(): ResponseEntity<*>? {
@@ -81,7 +87,6 @@ class ImageController {
     fun getTags(
             @PathVariable(value = "image_name") imageName: String
     ): ResponseEntity<*>? {
-        println(imageName)
         val data = DatabaseHandler.selectTags(imageName)
         return ResponseEntity(ResponseEnvelope(
                 HttpStatus.OK.value(),

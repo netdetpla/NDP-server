@@ -12,6 +12,7 @@ String.format = function () {
 
 function getRunningTask() {
     let $taskTableBody = $("#taskTableBody");
+    $taskTableBody.empty();
     $.get("/task/running", {}, function (json) {
         let data = json['data'];
         for (let i = 0; i < data.length; i++) {
