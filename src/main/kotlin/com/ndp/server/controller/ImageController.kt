@@ -81,6 +81,7 @@ class ImageController {
     fun getTags(
             @PathVariable(value = "image_name") imageName: String
     ): ResponseEntity<*>? {
+        println(imageName)
         val data = DatabaseHandler.selectTags(imageName)
         return ResponseEntity(ResponseEnvelope(
                 HttpStatus.OK.value(),

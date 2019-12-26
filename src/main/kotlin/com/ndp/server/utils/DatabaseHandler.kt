@@ -43,7 +43,6 @@ object DatabaseHandler {
     fun selectImage(): List<String> {
         return Image.selectDistinct(Image.imageName)
                 .map { it[Image.imageName]!! }
-                .toCollection(ArrayList())
     }
 
     fun selectTags(imageName: String): List<ImageJson> {
@@ -51,7 +50,7 @@ object DatabaseHandler {
                 .where { Image.imageName eq imageName }
                 .map {
                     ImageJson(
-                            it[Image.imageName]!!,
+                            imageName,
                             it[Image.tag]!!,
                             it[Image.uploadTime]!!,
                             it[Image.size]!!
