@@ -3,9 +3,12 @@ function searchPortChart(keyword) {
         "type": "port",
         "keyword": keyword
     }, function (json) {
-        drawChart($("#serviceChart")[0], json["labels"], json['data']);
-        let card = $("#serviceCard");
-        card.removeClass("statistic-hide");
+        let data = json['data'];
+        let $serviceChartBox = $("#serviceChartBox");
+        $serviceChartBox.empty();
+        $serviceChartBox.append("<canvas id=\"serviceChart\"></canvas>");
+        drawChart($("#serviceChart")[0], data["labels"], data['data']);
+        $("#serviceCard").removeClass("statistic-hide");
     });
 }
 
@@ -14,9 +17,12 @@ function searchServiceChart(keyword) {
         "type": "service",
         "keyword": keyword
     }, function (json) {
-        drawChart($("#portChart")[0], json["labels"], json['data']);
-        let card = $("#portCard");
-        card.removeClass("statistic-hide");
+        let data = json['data'];
+        let $portChartBox = $("#portChartBox");
+        $portChartBox.empty();
+        $portChartBox.append("<canvas id=\"portChart\"></canvas>");
+        drawChart($("#portChart")[0], data["labels"], data['data']);
+        $("#portCard").removeClass("statistic-hide");
     });
 }
 
@@ -25,19 +31,25 @@ function searchIPChart(keyword) {
         "type": "ip",
         "keyword": keyword
     }, function (json) {
-        let portLabels = json["port"]["labels"];
-        let portData = json["port"]["data"];
-        let serviceLabels = json["service"]["labels"];
-        let serviceData = json["service"]["data"];
-
+        let data = json['data'];
+        let portLabels = data["port"]["labels"];
+        let portData = data["port"]["data"];
+        let serviceLabels = data["service"]["labels"];
+        let serviceData = data["service"]["data"];
+        let $portChartBox = $("#portChartBox");
+        $portChartBox.empty();
+        $portChartBox.append("<canvas id=\"portChart\"></canvas>");
         drawChart($("#portChart")[0], portLabels, portData);
         $("#portCard").removeClass("statistic-hide");
-
+        let $serviceChartBox = $("#serviceChartBox");
+        $serviceChartBox.empty();
+        $serviceChartBox.append("<canvas id=\"serviceChart\"></canvas>");
         drawChart($("#serviceChart")[0], serviceLabels, serviceData);
         $("#serviceCard").removeClass("statistic-hide");
     });
 }
 
+// init
 $("#submitSearch").on("click", function () {
     $("#portCard").addClass("statistic-hide");
     $("#serviceCard").addClass("statistic-hide");

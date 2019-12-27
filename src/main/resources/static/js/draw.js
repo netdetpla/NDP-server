@@ -25,7 +25,8 @@ function drawChart(canvas, labels, data) {
                     zeroLineColor: "transparent",
                 },
                 ticks: {
-                    fontColor: "#9a9a9a"
+                    fontColor: "#9a9a9a",
+                    beginAtZero : true
                 }
             }],
 
@@ -70,7 +71,7 @@ function drawChart(canvas, labels, data) {
     gradientStroke.addColorStop(1, midColorSet[colorID]);
     gradientStroke.addColorStop(0.2, 'rgba(72, 72, 176, 0.0)');
     gradientStroke.addColorStop(0, 'rgba(119, 52, 169, 0)');
-    new Chart(ctx, {
+    return new Chart(ctx, {
         type: "bar",
         data: {
             labels: labels,

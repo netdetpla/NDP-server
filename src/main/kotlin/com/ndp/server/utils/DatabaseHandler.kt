@@ -219,16 +219,18 @@ object DatabaseHandler {
                 }
             }
         }
-        val map = HashMap<String, Int>()
+        val map = LinkedHashMap<String, Int>()
         val count = count(Port.id).aliased("c")
 
         Port.select(column, count)
                 .whereWithConditions {
                     if (ipStart != 0L) {
-                        it += Port.ipID greaterEq ipStart
-                        it += Port.ipID lessEq ipEnd
-                    } else {
-                        it += Port.ipID eq ipStart
+                        if (ipEnd > ipStart) {
+                            it += Port.ipID greaterEq ipStart
+                            it += Port.ipID lessEq ipEnd
+                        } else {
+                            it += Port.ipID eq ipStart
+                        }
                     }
                     if (port != 0) {
                         it += Port.port eq port
@@ -237,11 +239,11 @@ object DatabaseHandler {
                         it += Port.service eq service
                     }
                 }
-                .groupBy(Port.port)
+                .groupBy(column)
                 .orderBy(count.desc())
                 .limit(0, 8)
                 .forEach {
-                    map[it[Port.port]!!.toString()] = it[count]!!
+                    map[it[column]!!.toString()] = it[count]!!
                 }
         return map
     }
@@ -302,7 +304,7 @@ object DatabaseHandler {
         val waiting = Task.select(count)
                 .whereWithConditions {
                     it += Task.tid eq tid
-                    it += Task.taskStatus eq 20000
+                    it += Task.taskStatus inList listOf(20000, 20010, 20020)
                 }
                 .map { it[count]!! }
                 .toList()[0]
@@ -317,7 +319,7 @@ object DatabaseHandler {
     }
 
     fun getTaskGroupByImage(isFinished: Boolean): Map<String, Int> {
-        val idMap = HashMap<Int, Int>()
+        val idMap = LinkedHashMap<Int, Int>()
         val count = count(Task.id).aliased("c")
         Task.select(Task.imageID, count)
                 .where {
@@ -329,7 +331,7 @@ object DatabaseHandler {
                 .groupBy(Task.imageID)
                 .orderBy(count.desc())
                 .forEach { idMap[it[Task.imageID]!!] = it[count]!! }
-        val map = HashMap<String, Int>()
+        val map = LinkedHashMap<String, Int>()
         for (k in idMap.keys) {
             val imageName = selectImageInfoByID(k).imageName
             map[imageName] = map.getOrDefault(imageName, 0) + idMap[k]!!
@@ -349,7 +351,7 @@ object DatabaseHandler {
             table: Table<Nothing>, idColumn: Column<Int>, column: Column<Int>
     ): Map<Int, Int> {
         val count = count(idColumn).aliased("c")
-        val map = HashMap<Int, Int>()
+        val map = LinkedHashMap<Int, Int>()
         table.select(column, count)
                 .groupBy(column)
                 .orderBy(count.desc())
