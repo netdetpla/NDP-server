@@ -69,6 +69,9 @@ object TaskGenerator {
                 g.clear()
             }
         }
+        if (i > 0) {
+            groups.add(g.joinToString(separator))
+        }
         return groups
     }
 

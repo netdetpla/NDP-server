@@ -167,13 +167,14 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/ipTestGeo")
+    @PostMapping("/task/batchAdd/ipTestGeo")
     fun batchAddIPTestGeoTask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {
         val limit = Integer.parseInt(num)
         val target = DatabaseHandler.getIPByCountry(country, ipCount, limit)
         Settings.setting["ipCount"] = (ipCount + limit).toString()
+        Settings.save()
         val imageID = DatabaseHandler.selectNewImageID("ip-test")
         val tid = DatabaseHandler.selectMaxTid()
         for (t in target) {
@@ -191,7 +192,7 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/ipTestA")
+    @PostMapping("/task/batchAdd/ipTestA")
     fun batchAddIPTestATask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {
@@ -214,7 +215,7 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/portScan")
+    @PostMapping("/task/batchAdd/portScan")
     fun batchAddPortScanTask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {
@@ -235,7 +236,7 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/dnssecure")
+    @PostMapping("/task/batchAdd/dnssecure")
     fun batchAddDnssecureTask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {
@@ -256,7 +257,7 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/urlCrawl")
+    @PostMapping("/task/batchAdd/urlCrawl")
     fun batchAddURLCrawlTask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {
@@ -277,7 +278,7 @@ class TaskController {
         ), HttpStatus.OK)
     }
 
-    @PutMapping("/task/batchAdd/pageCrawl")
+    @PostMapping("/task/batchAdd/pageCrawl")
     fun batchAddPageCrawlTask(
             @RequestParam("num") num: String
     ): ResponseEntity<*>? {

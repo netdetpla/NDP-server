@@ -444,9 +444,11 @@ object DatabaseHandler {
         DomainIP.select(DomainIP.id, DomainIP.ipID)
                 .where { DomainIP.ipTestFlag eq 0 }
                 .limit(0, limit)
-                .onEach { id.add(it[DomainIP.id]!!) }
-                .map { TaskGenerator.iNetNumber2String(it[DomainIP.ipID]!!) + "/24" }
-                .forEach { ips.add(it) }
+                .forEach {
+                    id.add(it[DomainIP.id]!!)
+                    ips.add(TaskGenerator.iNetNumber2String(it[DomainIP.ipID]!!) + "/24")
+                }
+        println("check point")
         DomainIP.batchUpdate {
             for (i in id) {
                 item {
