@@ -13,7 +13,4 @@ object Image : Table<Nothing>("image") {
     val uploadTime by varchar("upload_time")
     val fileName by varchar("file_name")
     val isLoaded by int("is_loaded")
-    val cpu by int("cpu")
-    val memory by int("memory")
-    val bandwidth by int("bandwidth")
 }
