@@ -198,7 +198,7 @@ class TaskController {
     ): ResponseEntity<*>? {
         val limit = Integer.parseInt(num)
         val target = DatabaseHandler.getIPByDomainIP(limit)
-        val imageID = DatabaseHandler.selectNewImageID("ip-test")
+        val imageID = DatabaseHandler.selectNewImageID("ip-test-ns")
         val tid = DatabaseHandler.selectMaxTid()
         for (t in target) {
             TaskGenerator.ipTest(
@@ -221,7 +221,7 @@ class TaskController {
     ): ResponseEntity<*>? {
         val limit = Integer.parseInt(num)
         val ips = DatabaseHandler.getIPByPortScanFlag(limit).joinToString(",")
-        val imageID = DatabaseHandler.selectNewImageID("port-scan")
+        val imageID = DatabaseHandler.selectNewImageID("port-scan-ns")
         val tid = DatabaseHandler.selectMaxTid()
         TaskGenerator.portScan(
                 tid,
@@ -242,7 +242,8 @@ class TaskController {
     ): ResponseEntity<*>? {
         val limit = Integer.parseInt(num)
         val urls = DatabaseHandler.getUrlByDnssecureFlag(limit)
-        val imageID = DatabaseHandler.selectNewImageID("dnssecure")
+//        val imageID = DatabaseHandler.selectNewImageID("dnssecure")
+        val imageID = DatabaseHandler.selectNewImageID("dns-query-ns")
         val tid = DatabaseHandler.selectMaxTid()
         TaskGenerator.dnssecure(
                 tid,
